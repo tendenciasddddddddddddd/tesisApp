@@ -18,4 +18,16 @@ export class SearchService {
         map((dataRaw: any) => dataRaw.data)
       )
   }
+  listClientes() {
+    return this.http.get(`${this.URL}/cliente/list`);
+  }
+  eliminar(key: string){
+    return this.http.delete(`${this.URL}/cliente/${key}`);
+  }
+  Guardar(cliente: any) {
+    return this.http.post(`${this.URL}/cliente/`,cliente);
+  }
+  Update(id: string ,cliente: any) {
+    return this.http.put(`${this.URL}/cliente/${id}`,cliente);
+  }
 }
