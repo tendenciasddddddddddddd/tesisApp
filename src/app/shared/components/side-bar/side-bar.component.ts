@@ -26,7 +26,7 @@ export class SideBarComponent implements OnInit {
       {
         name: 'Clientes',
         icon: 'uil uil-search',
-        router: ['/', 'history']
+        router: ['/', 'clientes']
       },
       {
         name: 'Servicios',
