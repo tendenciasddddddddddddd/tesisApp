@@ -1,7 +1,7 @@
 <div class="history-page" style="margin-top: 10px;">
     <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
         <div nz-col nzSpan="8">
-            <h2 nz-typography>Gestion de clientes</h2>
+            <h2 nz-typography>Usuarios de sistema</h2>
         </div>
         <div nz-col nzSpan="8">
             <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
@@ -11,7 +11,7 @@
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
             <button nz-button nzType="primary" (click)="showModal()"
-                style="margin-top: 10px;margin-left: auto !important;">Crear cliente</button>
+                style="margin-top: 10px;margin-left: auto !important;">Crear usuario</button>
         </div>
     </div>
     <ng-template #suffixIconSearch>
@@ -27,15 +27,15 @@
                 <tr>
                     <th>Nombres</th>
                     <th>Identificación</th>
-                    <th>Dirección</th>
+                    <th>Email</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data">
-                    <td>{{data.nombres}}</td>
-                    <td>{{data.identificacion}}</td>
-                    <td>{{data.direccion}}</td>
+                    <td>{{data.fullname}}</td>
+                    <td>{{data.cedula}}</td>
+                    <td>{{data.email}}</td>
                     <td>
                         <a nz-dropdown [nzDropdownMenu]="menu">
                             Acción
@@ -44,6 +44,7 @@
                         <nz-dropdown-menu #menu="nzDropdownMenu">
                             <ul nz-menu nzSelectable>
                                 <li nz-menu-item (click)="update(data)">Editar</li>
+                                <li nz-menu-item (click)="role(data)">Roles y permisos</li>
                                 <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
                             </ul>
                         </nz-dropdown-menu>
@@ -58,11 +59,11 @@
         <ng-container *nzModalContent>
             <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="identificacion" nzRequired>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cedula" nzRequired>
                         <span>Identificación</span>
                     </nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su identificacion!">
-                        <input nz-input id="identificacion" formControlName="identificacion" autocomplete="off" />
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la identificacion!">
+                        <input nz-input id="cedula" formControlName="cedula" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -72,18 +73,18 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nombres" nzRequired>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="fullname" nzRequired>
                         <span>Apellidos y nombres</span>
                     </nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su nombres!">
-                        <input nz-input id="nombres" formControlName="nombres" autocomplete="off" />
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el nombre!">
+                        <input nz-input id="fullname" formControlName="fullname" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="telefono" nzRequired>
                         <span>Teléfono</span>
                     </nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su telefono!">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el telefono!">
                         <input nz-input id="telefono" formControlName="telefono" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
@@ -91,11 +92,27 @@
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="direccion" nzRequired>
                         <span>Direccion</span>
                     </nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su direccion!">
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la direccion!">
                         <input nz-input id="direccion" formControlName="direccion" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
             </form>
         </ng-container>
     </nz-modal>
+    <nz-modal [nzStyle]="{width:'550px'}" nzCentered [(nzVisible)]="isRoles" nzTitle="Roles de usuario"
+    (nzOnCancel)="handleCancelRole()">
+    <ng-container *nzModalContent>
+        <div nz-row class="login-form-margin">
+            <div nz-col [nzSpan]="8">
+                <label nz-checkbox [(ngModel)]="roladmin" (ngModelChange)="onAdmin('Admin')">Administrador</label>
+            </div>
+            <div nz-col [nzSpan]="8">
+              <label nz-checkbox [(ngModel)]="rolsecretario" (ngModelChange)="onSecretario('Secretaria')">Secretario</label>
+            </div>
+            <div nz-col [nzSpan]="8">
+                <label nz-checkbox [(ngModel)]="roltramitador" (ngModelChange)="onTramitador('Tramitador')">Tramitador</label>
+              </div>
+          </div>
+    </ng-container>
+</nz-modal>
 </div>

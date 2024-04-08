@@ -32,6 +32,20 @@ export class ServicioPageComponent implements OnInit {
   ngOnInit(): void {
     this.getData();
   }
+  copylistOfData = [...this.listDto];
+  search(search: any) {
+    const targetValue: any[] = [];
+    this.copylistOfData.forEach((value: any) => {
+      let keys = Object.keys(value);
+      for (let i = 0; i < keys.length; i++) {
+        if (value[keys[i]] && value[keys[i]].toString().toLocaleLowerCase().includes(search)) {
+          targetValue.push(value);
+          break;
+        }
+      }
+    });
+    this.listDto = targetValue;
+  }
   submitForm(): void {
     if (this.validateForm.valid) {
       if(this.keyId === ''){
@@ -81,6 +95,7 @@ export class ServicioPageComponent implements OnInit {
         res => {
           let data: any = res;
           this.listDto = data;
+          this.copylistOfData = [...data];
           this.isLoads = false;
         },
       )

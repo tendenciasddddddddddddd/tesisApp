@@ -16,6 +16,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzFormModule,
     ReactiveFormsModule,
     NzInputModule,
-    NzMessageModule
+    NzMessageModule,
+    NzGridModule,
+    NzSpinModule
   ]
 })
 export class ServiciosModule { }

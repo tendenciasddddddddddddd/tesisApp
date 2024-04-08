@@ -9,3 +9,8 @@
   .register-are {
     margin-bottom: 8px;
   }
+  .centrar {
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+  }

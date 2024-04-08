@@ -1,11 +1,25 @@
 <div class="history-page" style="margin-top: 10px;">
-    <div style="display: flex;justify-content: space-between;margin-bottom: 15px;">
-        <h2 nz-typography>Gestion de servicios</h2>
-    <button nz-button nzType="primary" (click)="showModal()" style="margin-top: 10px;">Crear servicio</button>
+    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+        <div nz-col nzSpan="8">
+            <h2 nz-typography>Gestion de servicios</h2>
+        </div>
+        <div nz-col nzSpan="8">
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
+                <input type="search" #searchText nz-input placeholder="introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)"/>
+            </nz-input-group>
+        </div>
+        <div nz-col nzSpan="8" style="display: inline-grid;">
+            <button nz-button nzType="primary" (click)="showModal()"
+                style="margin-top: 10px;margin-left: auto !important;">Crear servicio</button>
+        </div>
     </div>
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
     
     <div *ngIf="isLoads;else other_content" class="centrar">
-        <nz-skeleton></nz-skeleton>
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
     <ng-template #other_content>
         <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="listDto">

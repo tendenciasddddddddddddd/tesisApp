@@ -39,35 +39,28 @@ export class SideBarComponent implements OnInit {
     this.mainMenu.accessLink = [
       {
         name: 'Archivador',
-        icon: 'uil-plus-square'
+        icon: 'uil-plus-square',
+        router: ['/', 'usuario']
       },
       {
         name: 'Caja',
-        icon: 'uil-heart-medical'
+        icon: 'uil-heart-medical',
+        router: ['/', 'usuari']
       },
       {
         name: 'Usuarios',
-        icon: 'uil-heart-medical'
+        icon: 'uil-heart-medical',
+        router: ['/', 'usuarios']
       }
     ]
 
     this.customOptions = [
       {
-        name: 'Empresa',
-        router: ['/']
+        icon: 'uil uil-chart',
+        name: 'Agencia',
+        router: ['/', 'agencia']
       },
-      {
-        name: 'Clave',
-        router: ['/']
-      },
-      {
-        name: 'Reportes',
-        router: ['/']
-      },
-      {
-        name: 'Cerrar seccion',
-        router: ['/', 'auth']
-      }
+      
     ]
 
   }
