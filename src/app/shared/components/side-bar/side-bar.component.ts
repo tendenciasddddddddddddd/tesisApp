@@ -31,7 +31,7 @@ export class SideBarComponent implements OnInit {
       {
         name: 'Servicios',
         icon: 'uil uil-chart',
-        router: ['/', 'favorites'],
+        router: ['/', 'servicios'],
         query: { hola: 'mundo' }
       }
     ]

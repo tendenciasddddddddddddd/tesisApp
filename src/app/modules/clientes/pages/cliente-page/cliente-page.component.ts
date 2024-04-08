@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService } from '@modules/history/services/search.service';
+import { ClientServiceService } from '@modules/clientes/services/client-service.service';
 import { Observable, of } from 'rxjs';
 import {FormControl,  FormGroup,  NonNullableFormBuilder,  Validators} from '@angular/forms';
-import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
@@ -14,8 +13,8 @@ export class ClientePageComponent implements OnInit {
   listResults$: Observable<any> = of([])
   isLoads: boolean = false;
   isVisible = false;
-  keyUser: string ='';
-  lisCliente: any = [];
+  keyId: string ='';
+  lisDto: any = [];
   validateForm: FormGroup<{
     email: FormControl<string>;
     identificacion: FormControl<string>;
@@ -23,7 +22,7 @@ export class ClientePageComponent implements OnInit {
     telefono: FormControl<string>;
     direccion: FormControl<string>;
   }>;
-  constructor(private searchService: SearchService,
+  constructor(private cliService: ClientServiceService,
     private fb: NonNullableFormBuilder, private modal: NzModalService
   ) { 
     this.validateForm = this.fb.group({
@@ -40,8 +39,8 @@ export class ClientePageComponent implements OnInit {
   }
   submitForm(): void {
     if (this.validateForm.valid) {
-      if(this.keyUser === ''){
-        this.searchService.Guardar(this.validateForm.value)
+      if(this.keyId === ''){
+        this.cliService.Save(this.validateForm.value)
         .subscribe(
           res => {
             this.isVisible = false;
@@ -49,7 +48,7 @@ export class ClientePageComponent implements OnInit {
             this.validateForm.reset();
           })
       } else {
-        this.searchService.Update(this.keyUser, this.validateForm.value)
+        this.cliService.Update(this.keyId, this.validateForm.value)
         .subscribe(
           res => {
             this.isVisible = false;
@@ -81,23 +80,23 @@ export class ClientePageComponent implements OnInit {
   }
   getData() {
     this.isLoads = true;
-    this.searchService.listClientes()
+    this.cliService.list()
       .subscribe(
         res => {
           let data: any = res;
-          this.lisCliente = data;
+          this.lisDto = data;
           this.isLoads = false;
         },
       )
   }
   eliminar(key: string) {
-    this.searchService.eliminar(key)
+    this.cliService.Remove(key)
       .subscribe(res => {
         this.getData();
       })
   }
   update(data: any) {
-    this.keyUser = data._id;
+    this.keyId = data._id;
     this.validateForm.controls['nombres'].setValue(data.nombres);
     this.validateForm.controls['identificacion'].setValue(data.identificacion);
     this.validateForm.controls['telefono'].setValue(data.telefono);
@@ -106,7 +105,7 @@ export class ClientePageComponent implements OnInit {
     this.isVisible = true;
   }
   showModal(): void {
-    this.keyUser = ''
+    this.keyId = ''
     this.validateForm.reset();
     this.isVisible = true;
   }

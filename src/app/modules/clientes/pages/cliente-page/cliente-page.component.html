@@ -8,13 +8,13 @@
         <nz-skeleton></nz-skeleton>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable [nzData]="lisCliente">
+        <nz-table #basicTable [nzData]="lisDto">
             <thead>
                 <tr>
                     <th>Nombres</th>
                     <th>Identificación</th>
                     <th>Dirección</th>
-                    <th>Action</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +24,7 @@
                     <td>{{data.direccion}}</td>
                     <td>
                         <a nz-dropdown [nzDropdownMenu]="menu">
-                            Action
+                            Acción
                             <span nz-icon nzType="down"></span>
                         </a>
                         <nz-dropdown-menu #menu="nzDropdownMenu">

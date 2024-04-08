@@ -1,10 +1,109 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ServServiceService } from '@modules/servicios/services/serv-service.service';
+import { Observable, of } from 'rxjs';
+import {FormControl,  FormGroup,  NonNullableFormBuilder,  Validators} from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-servicio-page',
   templateUrl: './servicio-page.component.html',
   styleUrls: ['./servicio-page.component.css']
 })
-export class ServicioPageComponent {
+export class ServicioPageComponent implements OnInit {
+  listResults$: Observable<any> = of([])
+  isLoads: boolean = false;
+  isVisible = false;
+  keyId: string ='';
+  listDto: any = [];
+  validateForm: FormGroup<{
+    nombre: FormControl<string>;
+    estado: FormControl<boolean>;
+  }>;
+  constructor(private servService: ServServiceService,
+    private fb: NonNullableFormBuilder, private modal: NzModalService
+  ) { 
+    this.validateForm = this.fb.group({
+      nombre: ['', [Validators.required]],
+      estado: [true],
+    });
+  }
 
+  ngOnInit(): void {
+    this.getData();
+  }
+  submitForm(): void {
+    if (this.validateForm.valid) {
+      if(this.keyId === ''){
+        this.servService.Save(this.validateForm.value)
+        .subscribe(
+          res => {
+            this.isVisible = false;
+            this.getData();
+            this.validateForm.reset();
+          })
+      } else {
+        this.servService.Update(this.keyId, this.validateForm.value)
+        .subscribe(
+          res => {
+            this.isVisible = false;
+            this.getData();
+            this.validateForm.reset();
+          })
+      }
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+  }
+  showDeleteConfirm(key : string): void {
+    this.modal.confirm({
+      nzTitle: '¿Estás seguro de eliminar?',
+      nzContent: '<b style="color: red;">Esta acción no se puede deshacer</b>',
+      nzOkText: 'Emiminar',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.eliminar(key),
+      nzCancelText: 'Cancelar',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+  getData() {
+    this.isLoads = true;
+    this.servService.list()
+      .subscribe(
+        res => {
+          let data: any = res;
+          this.listDto = data;
+          this.isLoads = false;
+        },
+      )
+  }
+  eliminar(key: string) {
+    this.servService.Remove(key)
+      .subscribe(res => {
+        this.getData();
+      })
+  }
+  update(data: any) {
+    this.keyId = data._id;
+    this.validateForm.controls['nombre'].setValue(data.nombre);
+    this.isVisible = true;
+  }
+  showModal(): void {
+    this.keyId = ''
+    this.validateForm.reset();
+    this.isVisible = true;
+  }
+
+  handleOk(): void {
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
+  }
 }
