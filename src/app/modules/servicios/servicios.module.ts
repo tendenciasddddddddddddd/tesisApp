@@ -15,6 +15,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzSkeletonModule,
     NzFormModule,
     ReactiveFormsModule,
-    NzInputModule
+    NzInputModule,
+    NzMessageModule
   ]
 })
 export class ServiciosModule { }

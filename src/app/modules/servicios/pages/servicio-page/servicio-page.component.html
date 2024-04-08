@@ -8,7 +8,7 @@
         <nz-skeleton></nz-skeleton>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable [nzData]="listDto">
+        <nz-table #basicTable nzShowSizeChanger [nzData]="listDto">
             <thead>
                 <tr>
                     <th>Nombres</th>
@@ -48,7 +48,7 @@
                         <span>Nombre servicio</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el servicio!">
-                        <input nz-input id="nombre" formControlName="nombre" />
+                        <input nz-input id="nombre" formControlName="nombre" autocomplete="off"/>
                     </nz-form-control>
                 </nz-form-item>
             </form>

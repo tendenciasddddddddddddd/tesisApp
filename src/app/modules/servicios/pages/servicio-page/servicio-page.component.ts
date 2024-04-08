@@ -3,6 +3,7 @@ import { ServServiceService } from '@modules/servicios/services/serv-service.ser
 import { Observable, of } from 'rxjs';
 import {FormControl,  FormGroup,  NonNullableFormBuilder,  Validators} from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-servicio-page',
@@ -20,7 +21,7 @@ export class ServicioPageComponent implements OnInit {
     estado: FormControl<boolean>;
   }>;
   constructor(private servService: ServServiceService,
-    private fb: NonNullableFormBuilder, private modal: NzModalService
+    private fb: NonNullableFormBuilder, private modal: NzModalService, private message: NzMessageService
   ) { 
     this.validateForm = this.fb.group({
       nombre: ['', [Validators.required]],
@@ -37,6 +38,7 @@ export class ServicioPageComponent implements OnInit {
         this.servService.Save(this.validateForm.value)
         .subscribe(
           res => {
+            this.message.create('success', `Registro creado con exito`);
             this.isVisible = false;
             this.getData();
             this.validateForm.reset();
@@ -45,6 +47,7 @@ export class ServicioPageComponent implements OnInit {
         this.servService.Update(this.keyId, this.validateForm.value)
         .subscribe(
           res => {
+            this.message.create('success', `Registro editado con exito`);
             this.isVisible = false;
             this.getData();
             this.validateForm.reset();
@@ -63,7 +66,7 @@ export class ServicioPageComponent implements OnInit {
     this.modal.confirm({
       nzTitle: '¿Estás seguro de eliminar?',
       nzContent: '<b style="color: red;">Esta acción no se puede deshacer</b>',
-      nzOkText: 'Emiminar',
+      nzOkText: 'Eliminar',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => this.eliminar(key),
@@ -85,6 +88,7 @@ export class ServicioPageComponent implements OnInit {
   eliminar(key: string) {
     this.servService.Remove(key)
       .subscribe(res => {
+        this.message.create('success', `Registro eliminado con exito`);
         this.getData();
       })
   }

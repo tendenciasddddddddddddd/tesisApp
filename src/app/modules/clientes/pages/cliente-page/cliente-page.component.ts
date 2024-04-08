@@ -3,6 +3,7 @@ import { ClientServiceService } from '@modules/clientes/services/client-service.
 import { Observable, of } from 'rxjs';
 import {FormControl,  FormGroup,  NonNullableFormBuilder,  Validators} from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-cliente-page',
@@ -23,7 +24,7 @@ export class ClientePageComponent implements OnInit {
     direccion: FormControl<string>;
   }>;
   constructor(private cliService: ClientServiceService,
-    private fb: NonNullableFormBuilder, private modal: NzModalService
+    private fb: NonNullableFormBuilder, private modal: NzModalService, private message: NzMessageService
   ) { 
     this.validateForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
@@ -43,6 +44,7 @@ export class ClientePageComponent implements OnInit {
         this.cliService.Save(this.validateForm.value)
         .subscribe(
           res => {
+            this.message.create('success', `Registro creado con exito`);
             this.isVisible = false;
             this.getData();
             this.validateForm.reset();
@@ -51,6 +53,7 @@ export class ClientePageComponent implements OnInit {
         this.cliService.Update(this.keyId, this.validateForm.value)
         .subscribe(
           res => {
+            this.message.create('success', `Registro editado con exito`);
             this.isVisible = false;
             this.getData();
             this.validateForm.reset();
@@ -70,7 +73,7 @@ export class ClientePageComponent implements OnInit {
     this.modal.confirm({
       nzTitle: '¿Estás seguro de eliminar?',
       nzContent: '<b style="color: red;">Esta acción no se puede deshacer</b>',
-      nzOkText: 'Emiminar',
+      nzOkText: 'Eliminar',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => this.eliminar(key),
@@ -92,6 +95,7 @@ export class ClientePageComponent implements OnInit {
   eliminar(key: string) {
     this.cliService.Remove(key)
       .subscribe(res => {
+        this.message.create('success', `Registro eliminado con exito`);
         this.getData();
       })
   }
