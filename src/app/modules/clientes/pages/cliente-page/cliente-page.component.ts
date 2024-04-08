@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientServiceService } from '@modules/clientes/services/client-service.service';
 import { Observable, of } from 'rxjs';
-import {FormControl,  FormGroup,  NonNullableFormBuilder,  Validators} from '@angular/forms';
+import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -14,7 +14,7 @@ export class ClientePageComponent implements OnInit {
   listResults$: Observable<any> = of([])
   isLoads: boolean = false;
   isVisible = false;
-  keyId: string ='';
+  keyId: string = '';
   lisDto: any = [];
   validateForm: FormGroup<{
     email: FormControl<string>;
@@ -25,7 +25,7 @@ export class ClientePageComponent implements OnInit {
   }>;
   constructor(private cliService: ClientServiceService,
     private fb: NonNullableFormBuilder, private modal: NzModalService, private message: NzMessageService
-  ) { 
+  ) {
     this.validateForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
       identificacion: ['', [Validators.required]],
@@ -38,26 +38,40 @@ export class ClientePageComponent implements OnInit {
   ngOnInit(): void {
     this.getData();
   }
+  copylistOfData = [...this.lisDto];
+  search(search: any) {
+    const targetValue: any[] = [];
+    this.copylistOfData.forEach((value: any) => {
+      let keys = Object.keys(value);
+      for (let i = 0; i < keys.length; i++) {
+        if (value[keys[i]] && value[keys[i]].toString().toLocaleLowerCase().includes(search)) {
+          targetValue.push(value);
+          break;
+        }
+      }
+    });
+    this.lisDto = targetValue;
+  }
   submitForm(): void {
     if (this.validateForm.valid) {
-      if(this.keyId === ''){
+      if (this.keyId === '') {
         this.cliService.Save(this.validateForm.value)
-        .subscribe(
-          res => {
-            this.message.create('success', `Registro creado con exito`);
-            this.isVisible = false;
-            this.getData();
-            this.validateForm.reset();
-          })
+          .subscribe(
+            res => {
+              this.message.create('success', `Registro creado con exito`);
+              this.isVisible = false;
+              this.getData();
+              this.validateForm.reset();
+            })
       } else {
         this.cliService.Update(this.keyId, this.validateForm.value)
-        .subscribe(
-          res => {
-            this.message.create('success', `Registro editado con exito`);
-            this.isVisible = false;
-            this.getData();
-            this.validateForm.reset();
-          })
+          .subscribe(
+            res => {
+              this.message.create('success', `Registro editado con exito`);
+              this.isVisible = false;
+              this.getData();
+              this.validateForm.reset();
+            })
       }
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
@@ -68,7 +82,7 @@ export class ClientePageComponent implements OnInit {
       });
     }
   }
-  showDeleteConfirm(key : string): void {
+  showDeleteConfirm(key: string): void {
     console.log(key);
     this.modal.confirm({
       nzTitle: '¿Estás seguro de eliminar?',
@@ -88,6 +102,7 @@ export class ClientePageComponent implements OnInit {
         res => {
           let data: any = res;
           this.lisDto = data;
+          this.copylistOfData = [...data];
           this.isLoads = false;
         },
       )

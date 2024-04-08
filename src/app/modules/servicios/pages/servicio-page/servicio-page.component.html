@@ -1,5 +1,5 @@
 <div class="history-page" style="margin-top: 10px;">
-    <div style="display: flex;justify-content: space-between;">
+    <div style="display: flex;justify-content: space-between;margin-bottom: 15px;">
         <h2 nz-typography>Gestion de servicios</h2>
     <button nz-button nzType="primary" (click)="showModal()" style="margin-top: 10px;">Crear servicio</button>
     </div>
@@ -8,7 +8,7 @@
         <nz-skeleton></nz-skeleton>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable nzShowSizeChanger [nzData]="listDto">
+        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="listDto">
             <thead>
                 <tr>
                     <th>Nombres</th>

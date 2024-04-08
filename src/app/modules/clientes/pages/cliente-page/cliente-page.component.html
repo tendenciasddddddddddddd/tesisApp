@@ -1,14 +1,27 @@
 <div class="history-page" style="margin-top: 10px;">
-    <div style="display: flex;justify-content: space-between;">
-        <h2 nz-typography>Gestion de clientes</h2>
-    <button nz-button nzType="primary" (click)="showModal()" style="margin-top: 10px;">Crear cliente</button>
-    </div>
+    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+        <div nz-col nzSpan="8">
+            <h2 nz-typography>Gestion de clientes</h2>
+        </div>
+        <div nz-col nzSpan="8">
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
+                <input type="text" #searchText nz-input placeholder="introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" />
+            </nz-input-group>
+        </div>
+        <div nz-col nzSpan="8" style="display: inline-grid;">
+            <button nz-button nzType="primary" (click)="showModal()" style="margin-top: 10px;margin-left: auto !important;">Crear cliente</button>
+        </div>
+      </div>
     
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
     <div *ngIf="isLoads;else other_content" class="centrar">
         <nz-skeleton></nz-skeleton>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable nzShowSizeChanger [nzData]="lisDto">
+        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
             <thead>
                 <tr>
                     <th>Nombres</th>
@@ -48,13 +61,13 @@
                         <span>Identificación</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su identificacion!">
-                        <input nz-input id="identificacion" formControlName="identificacion" autocomplete="off"/>
+                        <input nz-input id="identificacion" formControlName="identificacion" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El valor no es valido E-mail!">
-                        <input nz-input formControlName="email" id="email" autocomplete="off"/>
+                        <input nz-input formControlName="email" id="email" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -62,7 +75,7 @@
                         <span>Apellidos y nombres</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su nombres!">
-                        <input nz-input id="nombres" formControlName="nombres" autocomplete="off"/>
+                        <input nz-input id="nombres" formControlName="nombres" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -70,7 +83,7 @@
                         <span>Teléfono</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su telefono!">
-                        <input nz-input id="telefono" formControlName="telefono" autocomplete="off"/>
+                        <input nz-input id="telefono" formControlName="telefono" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -78,7 +91,7 @@
                         <span>Direccion</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su direccion!">
-                        <input nz-input id="direccion" formControlName="direccion" autocomplete="off"/>
+                        <input nz-input id="direccion" formControlName="direccion" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
             </form>
