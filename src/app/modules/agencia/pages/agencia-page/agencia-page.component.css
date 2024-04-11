@@ -1,0 +1,28 @@
+
+
+  .phone-select {
+    width: 70px;
+  }
+
+  .register-are {
+    margin-bottom: 8px;
+  }
+  .centrar {
+    display: flex;
+    justify-content: center;
+    border: 1px solid #303030;
+    padding: 25px;
+  }
+  .centrar2 {
+    display: flex;
+    justify-content: center;
+  }
+  .on-upload{
+    margin-bottom: 7px;
+    cursor: pointer;
+    background: hsla(0, 0%, 100%, .18);
+    border: 2px dashed rgb(255 255 255 / 40%);
+    border-radius: 3px;
+    width: 300px;
+    padding: 5px;
+  }

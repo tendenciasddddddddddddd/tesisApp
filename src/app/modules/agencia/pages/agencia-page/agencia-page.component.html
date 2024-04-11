@@ -1,1 +1,106 @@
-<p>agencia-page works!</p>
+<div class="history-page" style="margin-top: 10px;">
+    <div nz-row nzJustify="space-between" >
+        <div nz-col nzSpan="6">
+            <h2 nz-typography>Agencia</h2>
+        </div>
+    </div>
+    
+    <div *ngIf="isLoads;else other_content" class="centrar2">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+    <ng-template #other_content>
+        <div class="centrar">
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" style="min-width: 620px;">
+                <div class="centrar2" >
+                    <div class="centrar2 on-upload" (click)="openWidget()">
+                        <img [src]="imagePath"  style="height: 100px;width: 100px;border-radius: 10px;"/></div>
+                    </div>
+                   
+                
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="ruc" nzRequired>
+                        <span>RUC</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese ruc!">
+                        <input nz-input id="ruc" formControlName="ruc" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El valor no es valido E-mail!">
+                        <input nz-input formControlName="email" id="email" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nombres" nzRequired>
+                        <span>Razon Social</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la razonSocial!">
+                        <input nz-input id="razonSocial" formControlName="razonSocial" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="telefono" nzRequired>
+                        <span>Teléfono</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su telefono!">
+                        <input nz-input id="telefono" formControlName="telefono" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="dirMatriz" nzRequired>
+                        <span>Direccion matriz</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la dirMatriz!">
+                        <input nz-input id="dirMatriz" formControlName="dirMatriz" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="dirEstablecimiento" nzRequired>
+                        <span>Direccion establecmiento</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la dirEstablecimiento!">
+                        <input nz-input id="dirEstablecimiento" formControlName="dirEstablecimiento" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nombreComercial" nzRequired>
+                        <span>Direccion nombreComercial</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la nombreComercial!">
+                        <input nz-input id="nombreComercial" formControlName="nombreComercial" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="codDoc" nzRequired>
+                        <span>codDoc</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la codDoc!">
+                        <input nz-input id="codDoc" formControlName="codDoc" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="establecimiento" nzRequired>
+                        <span>establecimiento</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la establecimiento!">
+                        <input nz-input id="establecimiento" formControlName="establecimiento" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="obligadoContabilidad" nzRequired>
+                        <span>obligadoContabilidad</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la obligadoContabilidad!">
+                        <input nz-input id="obligadoContabilidad" formControlName="obligadoContabilidad" autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+                <div class="centrar2">
+                    <button nz-button [nzSize]="'large'" nzType="primary">Guardar cambios</button>
+                </div>
+               
+            </form>
+        </div>
+    </ng-template>
+    
+</div>

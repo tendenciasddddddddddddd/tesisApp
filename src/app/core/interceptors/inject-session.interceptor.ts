@@ -7,6 +7,8 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import {catchError,} from 'rxjs/operators';
+
 
 @Injectable()
 export class InjectSessionInterceptor implements HttpInterceptor {
@@ -25,12 +27,20 @@ export class InjectSessionInterceptor implements HttpInterceptor {
           }
         }
       )
+      return next.handle(newRequest).pipe(catchError(err  => {
+        if ([401, 403, 405].includes(err.status)) {
+          this.cookieService.delete('token')
+          window.location.reload()
+        }
 
-      return next.handle(newRequest);
+        const error = err.error?.message || err.statusText;
+        console.log(err);
+        return Observable.throw(error);
+    }))
 
     } catch (e) {
       console.log('🔴🔴🔴 Ojito error', e)
-      return next.handle(request);
+      return next.handle(request)
     }
   }
 }
