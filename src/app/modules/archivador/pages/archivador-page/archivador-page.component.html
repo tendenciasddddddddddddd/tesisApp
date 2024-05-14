@@ -36,8 +36,8 @@
                 <tr *ngFor="let data of basicTable.data">
                     <td>{{data.cliente?.nombres}}</td>
                     <td>{{data.servicio?.nombre}}</td>
+                    <td>{{data.provincia }} / {{data.canton}}</td>
                     <td>$ {{data.total}}</td>
-                    <td>{{data.direccion}}</td>
                     <td>
                         <a nz-dropdown [nzDropdownMenu]="menu">
                             Acción

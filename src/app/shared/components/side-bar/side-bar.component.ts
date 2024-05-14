@@ -63,7 +63,7 @@ export class SideBarComponent implements OnInit {
       {
         icon: 'uil uil-sort',
         name: 'Finalizar la sesión',
-        router: ['/', 'agencia']
+        router: ['/', 'auth']
       },
     ]
 

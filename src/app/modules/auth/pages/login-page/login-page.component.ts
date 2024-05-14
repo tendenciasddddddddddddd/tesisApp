@@ -17,6 +17,7 @@ export class LoginPageComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    //this.salir()
     this.formLogin = new UntypedFormGroup(
       {
         email: new UntypedFormControl('', [
@@ -32,7 +33,10 @@ export class LoginPageComponent implements OnInit {
       }
     )
   }
-
+  salir(){
+    this.cookie.delete('token')
+    window.location.reload()
+  }
   sendLogin(): void {
     const { email, password } = this.formLogin.value
     this.authService.sendCredentials(email, password)

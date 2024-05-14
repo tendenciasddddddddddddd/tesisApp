@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { HeaderUserComponent } from './components/header-user/header-user.component';
-import { OrderListPipe } from './pipe/order-list.pipe';
 import { ImgBrokenDirective } from './directives/img-broken.directive';
 
 
@@ -12,7 +11,6 @@ import { ImgBrokenDirective } from './directives/img-broken.directive';
   declarations: [
     SideBarComponent,
     HeaderUserComponent,
-    OrderListPipe,
     ImgBrokenDirective
 
   ],
@@ -23,7 +21,6 @@ import { ImgBrokenDirective } from './directives/img-broken.directive';
   exports: [
     SideBarComponent,
     HeaderUserComponent,
-    OrderListPipe,
     ImgBrokenDirective
   ]
 })

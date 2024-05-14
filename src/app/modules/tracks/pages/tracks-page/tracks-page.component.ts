@@ -1,6 +1,5 @@
 import { TrackService } from '@modules/tracks/services/track.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TrackModel } from '@core/models/tracks.model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -10,8 +9,7 @@ import { Subscription } from 'rxjs';
 })
 export class TracksPageComponent implements OnInit, OnDestroy {
 
-  tracksTrending: Array<TrackModel> = []
-  tracksRandom: Array<TrackModel> = []
+
   listObservers$: Array<Subscription> = []
 
   constructor(private trackService: TrackService) { }
