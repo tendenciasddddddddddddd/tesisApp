@@ -25,7 +25,7 @@ export class SideBarComponent implements OnInit {
       },
       {
         name: 'Clientes',
-        icon: 'uil uil-search',
+        icon: 'uil uil-users-alt',
         router: ['/', 'clientes']
       },
       {
@@ -39,17 +39,17 @@ export class SideBarComponent implements OnInit {
     this.mainMenu.accessLink = [
       {
         name: 'Archivador',
-        icon: 'uil-plus-square',
-        router: ['/', 'usuario']
+        icon: 'uil-clouds',
+        router: ['/', 'archivador']
       },
       {
         name: 'Caja',
-        icon: 'uil-heart-medical',
+        icon: 'uil-dollar-sign',
         router: ['/', 'usuari']
       },
       {
         name: 'Usuarios',
-        icon: 'uil-heart-medical',
+        icon: 'uil-user-plus',
         router: ['/', 'usuarios']
       }
     ]
@@ -60,7 +60,11 @@ export class SideBarComponent implements OnInit {
         name: 'Agencia',
         router: ['/', 'agencia']
       },
-      
+      {
+        icon: 'uil uil-sort',
+        name: 'Finalizar la sesión',
+        router: ['/', 'agencia']
+      },
     ]
 
   }

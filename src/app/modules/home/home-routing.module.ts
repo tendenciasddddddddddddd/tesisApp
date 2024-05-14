@@ -8,10 +8,6 @@ const routes: Routes = [
     loadChildren: () => import('@modules/tracks/tracks.module').then(m => m.TracksModule)
   },
   {
-    path: 'favorites',
-    loadChildren: () => import('@modules/favorites/favorites.module').then(m => m.FavoritesModule)
-  },
-  {
     path: 'clientes',
     loadChildren: () => import('@modules/clientes/clientes.module').then(m => m.ClientesModule)
   },
@@ -26,6 +22,10 @@ const routes: Routes = [
   {
     path: 'agencia',
     loadChildren: () => import('@modules/agencia/agencia.module').then(m => m.AgenciaModule)
+  },
+  {
+    path: 'archivador',
+    loadChildren: () => import('@modules/archivador/archivador.module').then(m => m.ArchivadorModule)
   },
   {
     path: '**',//TODO 404 cuando no existe la ruta

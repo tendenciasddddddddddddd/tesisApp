@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { HistoryRoutingModule } from './history-routing.module';
-import { HistoryPageComponent } from './pages/history-page/history-page.component';
+import { ArchivadorRoutingModule } from './archivador-routing.module';
+import { ArchivadorPageComponent } from './pages/archivador-page/archivador-page.component';
 import { SharedModule } from '@shared/shared.module';
-import { SearchComponent } from './components/search/search.component';
 import { FormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
@@ -16,19 +15,22 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
-//import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
-//import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
+
 
 @NgModule({
   declarations: [
-    HistoryPageComponent,
-    SearchComponent,
-
+    ArchivadorPageComponent
   ],
   imports: [
     CommonModule,
+    ArchivadorRoutingModule,
     SharedModule,
-    HistoryRoutingModule,
     FormsModule,
     NzButtonModule,
     NzTypographyModule,
@@ -39,8 +41,12 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzSkeletonModule,
     NzFormModule,
     ReactiveFormsModule,
-    NzInputModule
-    //NzFormTooltipIcon
+    NzInputModule,
+    NzMessageModule,
+    NzGridModule,
+    NzSpinModule,
+    NzDrawerModule,
+    NzSelectModule
   ]
 })
-export class HistoryModule { }
+export class ArchivadorModule { }

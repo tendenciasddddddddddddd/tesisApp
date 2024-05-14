@@ -1,0 +1,159 @@
+<div class="history-page" style="margin-top: 10px;">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+        <div nz-col nzSpan="8">
+            <h2 nz-typography>Archivador</h2>
+        </div>
+        <div nz-col nzSpan="8">
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
+                <input type="text" #searchText nz-input placeholder="introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" />
+            </nz-input-group>
+        </div>
+        <div nz-col nzSpan="8" style="display: inline-grid;">
+            <button nz-button nzType="primary" (click)="showModal()"
+                style="margin-top: 10px;margin-left: auto !important;">Agregar servicio</button>
+        </div>
+    </div>
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
+
+    <div *ngIf="isLoads;else other_content" class="centrar">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+    <ng-template #other_content>
+        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Identificación</th>
+                    <th>Dirección</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td>{{data.cliente?.nombres}}</td>
+                    <td>{{data.servicio?.nombre}}</td>
+                    <td>$ {{data.total}}</td>
+                    <td>{{data.direccion}}</td>
+                    <td>
+                        <a nz-dropdown [nzDropdownMenu]="menu">
+                            Acción
+                            <span nz-icon nzType="down"></span>
+                        </a>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu nzSelectable>
+                                <li nz-menu-item (click)="update(data)">Editar</li>
+                                <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </ng-template>
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="false" [nzWidth]="1100" [nzVisible]="isVisible"
+        nzTitle="Iniciar servicio" [nzFooter]="footerTpl" (nzOnClose)="handleCancel()">
+        <form nz-form *nzDrawerContent nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" id="serv">
+            <div nz-row [nzGutter]="8">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24">Cliente</nz-form-label>
+                        <nz-select id="cliente" formControlName="cliente" nzPlaceHolder="Seleccione un cliente" style="width: 67%;">
+                            <nz-option *ngFor="let option of lisCliente" [nzLabel]="option.nombres"
+                                [nzValue]="option"></nz-option>
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="sector" nzRequired>
+                            <span>Sector</span>
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese el sector!">
+                            <input nzSize="large" nz-input id="sector" formControlName="sector" autocomplete="off" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="8">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24">Servicios</nz-form-label>
+                        <nz-select id="servicio" formControlName="servicio" nzPlaceHolder="Seleccione un servicio" style="width: 67%;">
+                            <nz-option *ngFor="let option of lisServices" [nzLabel]="option.nombre"
+                                [nzValue]="option"></nz-option>
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="provincia" nzRequired>
+                            <span>Provincia</span>
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese la provincia!">
+                            <input nzSize="large" nz-input id="provincia" formControlName="provincia" autocomplete="off" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="8">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="total" nzRequired>
+                            <span>Total</span>
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese el total!">
+                            <input nzSize="large" type="number" nz-input id="total" formControlName="total" autocomplete="off" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="canton" nzRequired>
+                            <span>Cantón</span>
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese el canton!">
+                            <input nzSize="large" nz-input id="canton" formControlName="canton" autocomplete="off" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="8">
+                <div nz-col nzSpan="12">
+                   
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="parroquia" nzRequired>
+                            <span>Parroquia</span>
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese la parroquia!">
+                            <input nzSize="large" nz-input id="parroquia" formControlName="parroquia" autocomplete="off" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="8">
+                <div nz-col nzSpan="24">
+                    <nz-form-item>
+                        <nz-form-label>Descriptción</nz-form-label>
+                        <nz-form-control>
+                            <textarea id="mts" formControlName="mts" nz-input placeholder="porfavor ingrese una descripcion"
+                                [nzAutosize]="{ minRows: 4, maxRows: 4 }"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </form>
+
+        <ng-template #footerTpl>
+            <div style="float: right">
+                <button nz-button style="margin-right: 8px;">CANCEL</button>
+                <button nz-button nzType="primary" form="serv">GUARAR CAMBIOS</button>
+            </div>
+        </ng-template>
+    </nz-drawer>
+</div>
