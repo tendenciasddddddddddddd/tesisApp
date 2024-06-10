@@ -1,0 +1,189 @@
+<div class="history-page" style="margin-top: 10px;">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+        <div nz-col nzSpan="8">
+            <h2 nz-typography>Tramites finalizados</h2>
+        </div>
+        <div nz-col nzSpan="8">
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
+                <input type="text" #searchText nz-input placeholder="introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" />
+            </nz-input-group>
+        </div>
+        <div nz-col nzSpan="8" style="display: inline-grid;">
+          
+        </div>
+    </div>
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
+
+    <div *ngIf="isLoads;else other_content" class="centrar">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+    <ng-template #other_content>
+        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Servicio</th>
+                    <th>Dirección</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td>
+                        <div (click)="showModalArchiva(data)" style="cursor: pointer;color: blue;">
+                            {{data.search1}}
+                        </div>
+                    </td>
+                    <td>{{data.search2}}</td>
+                    <td>{{data.provincia }} / {{data.canton}}</td>
+                    <td>$ {{data.total}}</td>
+                    <td>
+                        <a nz-dropdown [nzDropdownMenu]="menu">
+                            Acción
+                            <span nz-icon nzType="down"></span>
+                        </a>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu nzSelectable>
+                                <li nz-menu-item (click)="openPagos(data)">Detalle pagos</li>
+                                <li nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </ng-template>
+
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="-1"
+        [nzVisible]="isVisibleArchivador" nzTitle="Procesos del tramite" [nzFooter]="footerTpl2"
+        (nzOnClose)="handleArchiCancel()">
+
+        <div *nzDrawerContent>
+            <div *ngIf="isLoad;else other_content2" class="centrar">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #other_content2>
+                <nz-table #basicTable2 [nzData]="listOfData" [nzScroll]="{ x: '2000px' }">
+                    <thead>
+                        <tr>
+                            <th>Asignado el: </th>
+                            <th>Departamento</th>
+                            <th>Asunto</th>
+                            <th>Subir archivo</th>
+                            <th>Nombre del documento</th>
+                            <th>Estado</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable2.data">
+                            <ng-container *ngIf="!editCache[data._id]?.edit;">
+                                <td>{{data?.fecha?.substring(0, 10)}}</td>
+                                <td>{{data.departamento}}</td>
+                                <td>{{data.asunto}}</td>
+                                <td>
+                                    <div *ngFor="let item of data.archivos">
+                                        <a target="_blank" href="{{item.link}}" class="s-spans">
+                                            <span nz-icon nzType="cloud-download" nzTheme="outline"></span>
+                                            {{item?.name?.substring(0, 18)}}
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>{{data.nombreDoc}}</td>
+                                <td>{{data.estadoTramite}}</td>
+                                <td>{{data?.responsable?.nombre}}</td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </ng-template>
+        </div>
+        <ng-template #footerTpl2>
+            <div style="text-align: center;">
+                <button [nzSize]="'large'" (click)="handleArchiCancel()" nz-button>CANCEL</button>
+            </div>
+        </ng-template>
+    </nz-drawer>
+
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="-1" [nzVisible]="isVisiblePagos"
+        nzTitle="Pagos del tramite" [nzFooter]="footerTpl3" (nzOnClose)="closePagos()">
+
+        <div *nzDrawerContent>
+            <div *ngIf="isLoad;else other_content2" class="centrar">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #other_content2>
+                <div nz-row>
+                    <div nz-col nzSpan="6">
+                        <span>Total</span>
+                        <h1 nz-typography>$ {{rowService.total}}</h1>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <span>Abonos</span>
+                        <h1 nz-typography>$ {{totalAbonos}}</h1>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <span>Saldo</span>
+                        <h1 nz-typography>$ {{rowService.total - totalAbonos}}</h1>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-progress nzType="circle" [nzPercent]="porcAbonos"
+                            [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"></nz-progress>
+                    </div>
+                </div>
+
+                <nz-divider></nz-divider>
+                <br>
+                <nz-table #basicTable [nzData]="listOfPagos">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable.data">
+                            <td>{{ data?.fecha?.substring(0, 10) }}</td>
+                            <td>{{ data.tipo }}</td>
+                            <td>{{ (data.monto).toFixed(2)}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </ng-template>
+
+        </div>
+        <ng-template #footerTpl3>
+            <div style="text-align: center;">
+                <button [nzSize]="'large'" (click)="closePagos()" nz-button>CANCEL</button>
+            </div>
+        </ng-template>
+    </nz-drawer>
+
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="1000" [nzVisible]="isVisibleComprobante"
+    nzTitle="Comprobante" [nzFooter]="footerTpl4" (nzOnClose)="closeComprobante()">
+
+    <div *nzDrawerContent>
+        <div *ngIf="isLoad;else other_content2" class="centrar">
+            <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+        </div>
+        <ng-template #other_content2>
+            <section v-else id="box" class="PaymentDetails" style="max-width: 160mm;">
+                <div [innerHTML]="facturaHtml"></div>
+            </section>
+        </ng-template>
+
+    </div>
+    <ng-template #footerTpl4>
+        <div style="text-align: center;">
+            <button [nzSize]="'large'" (click)="closeComprobante()" nz-button>CANCEL</button>
+            <nz-divider nzType="vertical"></nz-divider>
+            <button [nzSize]="'large'" (click)="builfPdf()" nzType="primary" nz-button>DESCARGAR COMPROBANTE</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+</div>

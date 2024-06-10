@@ -44,9 +44,9 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'archivador']
       },
       {
-        name: 'Tramites finalizados',
+        name: 'Finalizados',
         icon: 'uil-comment-check',
-        router: ['/', 'archivador']
+        router: ['/', 'finalizados']
       },
       {
         name: 'Caja',

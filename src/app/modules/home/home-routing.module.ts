@@ -28,6 +28,10 @@ const routes: Routes = [
     loadChildren: () => import('@modules/archivador/archivador.module').then(m => m.ArchivadorModule)
   },
   {
+    path: 'finalizados',
+    loadChildren: () => import('@modules/finalizados/finalizados.module').then(m => m.FinalizadosModule)
+  },
+  {
     path: '**',//TODO 404 cuando no existe la ruta
     redirectTo: '/tracks'
   }

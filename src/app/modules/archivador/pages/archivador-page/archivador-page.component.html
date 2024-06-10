@@ -26,7 +26,7 @@
             <thead>
                 <tr>
                     <th>Nombres</th>
-                    <th>Identificación</th>
+                    <th>Servicio</th>
                     <th>Dirección</th>
                     <th>Total</th>
                     <th>Acción</th>
@@ -36,10 +36,10 @@
                 <tr *ngFor="let data of basicTable.data">
                     <td>
                         <div (click)="showModalArchiva(data)" style="cursor: pointer;color: blue;">
-                            {{data.cliente?.nombres}}
+                            {{data.search1}}
                         </div>
                     </td>
-                    <td>{{data.servicio?.nombre}}</td>
+                    <td>{{data.search2}}</td>
                     <td>{{data.provincia }} / {{data.canton}}</td>
                     <td>$ {{data.total}}</td>
                     <td>
