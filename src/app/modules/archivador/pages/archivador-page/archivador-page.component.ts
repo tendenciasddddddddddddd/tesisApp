@@ -5,20 +5,57 @@ import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@ang
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
+interface ItemData {
+  _id: string;
+  fecha: string;
+  departamento: string;
+  asunto: string;
+  responsable: {
+    nombre: string;
+    cedula: string;
+  };
+  archivos: [{
+    link: string;
+    tipo: string;
+    size: string;
+    name: string;
+    formato: string;
+  }];
+  nombreDoc: string;
+  estadoTramite: string;
+}
+
 @Component({
   selector: 'app-archivador-page',
   templateUrl: './archivador-page.component.html',
   styleUrls: ['./archivador-page.component.css']
 })
 export class ArchivadorPageComponent implements OnInit {
+  /* */
+  editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+  listOfData: ItemData[] = [];
+
+  cloudName = "stebann";
+  uploadPreset = "zxrlydi4";
+  myWidget: any;
+  imagePath: string = '';
+
   listResults$: Observable<any> = of([])
   isLoads: boolean = false;
+  isLoad: boolean = false;
   isVisible = false;
+  isVisibleArchivador = false;
   keyId: string = '';
+  keyIdSelected: string = '';
+  rowService: any = {};
   cliente: string = '';
+  usuario:any={}
   lisDto: any = [];
+  rowRequirimiento: any = [];
   lisCliente: any = [];
   lisServices: any = [];
+  departamento: string = '';
+  selectedValue = null;
   validateForm: FormGroup<{
     canton: FormControl<string>;
     parroquia: FormControl<string>;
@@ -48,6 +85,33 @@ export class ArchivadorPageComponent implements OnInit {
     this.getData();
     this.getClient();
     this.getServicios()
+    this.myWidget = (window as any).cloudinary.createUploadWidget(
+      {
+        sources: ['image_search', 'local', 'camera', 'google_drive'],
+        cloudName: this.cloudName,
+        uploadPreset: this.uploadPreset,
+        multiple: false,
+      },
+      (error: any, result: any,) => {
+        if (!error && result && result.event === "success") {
+          const arr = result?.info.path.split(".");
+          let info = {
+            link: result?.info.secure_url,
+            tipo: arr[arr.length - 1],
+            size: result?.info.bytes,
+            name: result?.info.original_filename,
+            formato: result?.info.format,
+          }
+          this.editCache[this.keyIdSelected].data.archivos.push(info)
+        }
+      }
+    );
+    this.usuario = localStorage.getItem('Usuario');
+    this.usuario = JSON.parse(this.usuario)
+  }
+  openWidget(id: any) {
+    this.keyIdSelected = id;
+    this.myWidget.open();
   }
   copylistOfData = [...this.lisDto];
   search(search: any) {
@@ -120,6 +184,19 @@ export class ArchivadorPageComponent implements OnInit {
         },
       )
   }
+  getDataById(id: string) {
+    this.isLoad = true;
+    this.arcService.getById(id)
+      .subscribe(
+        res => {
+          let data: any = res;
+          this.listOfData = [...data.arrRequisitos];
+          this.updateEditCache();
+          this.isLoad = false;
+
+        },
+      )
+  }
   getClient() {
     this.arcService.listCliente()
       .subscribe(
@@ -146,7 +223,6 @@ export class ArchivadorPageComponent implements OnInit {
       })
   }
   update(data: any) {
-    console.log(data.cliente);
     this.keyId = data._id;
     this.validateForm.controls['mts'].setValue(data.mts);
     this.validateForm.controls['parroquia'].setValue(data.parroquia);
@@ -157,7 +233,6 @@ export class ArchivadorPageComponent implements OnInit {
     this.validateForm.controls['servicio'].setValue(data.servicio);
     this.validateForm.controls['cliente'].setValue(data.cliente);
     this.isVisible = true;
-    console.log(this.validateForm.controls);
   }
   showModal(): void {
     this.keyId = ''
@@ -171,5 +246,89 @@ export class ArchivadorPageComponent implements OnInit {
 
   handleCancel(): void {
     this.isVisible = false;
+  }
+
+  /*Matrix de archivos */
+  showModalArchiva(data: any): void {
+    this.rowService = data
+    this.getDataById(this.rowService?._id)
+    this.isVisibleArchivador = true;
+  }
+  handleArchiCancel(): void {
+    this.isVisibleArchivador = false;
+  }
+  addItem(): void {
+    try {
+      let info = {
+        fecha: new Date(),
+        departamento: 'N/A',
+        asunto: 'N/A',
+        responsable: this.usuario,
+        archivos: [],
+        nombreDoc: 'N/A',
+        estadoTramite: 'PENDIENTE',
+      }
+      this.isLoad = true;
+      this.arcService.saveRequerimiento(this.rowService?._id, info)
+        .subscribe(
+          res => {
+            this.message.create('success', `Requerimiento creado con exito`);
+            this.isLoad = false;
+            this.getDataById(this.rowService?._id)
+          })
+
+    } catch (error) {
+      this.isLoad = false;
+    }
+  }
+  startEdit(id: string): void {
+    this.editCache[id].edit = true;
+  }
+
+  cancelEdit(id: string): void {
+    const index = this.listOfData.findIndex(item => item._id === id);
+    this.editCache[id] = {
+      data: { ...this.listOfData[index] },
+      edit: false
+    };
+  }
+
+  saveEdit(id: string): void {
+    this.editCache[id].edit = false;
+    let model = {
+      keyReqm: id,
+      data: this.editCache[id].data
+    }
+    this.arcService.updateRequerimiento(this.rowService?._id, model)
+      .subscribe(res => {
+        this.message.create('success', `Requerimiento actualizado con exito`);
+        this.getDataById(this.rowService?._id)
+      })
+  }
+  deleteRow(id: string): void {
+    try {
+      this.listOfData = this.listOfData.filter(d => d._id !== id);
+      let model = { keyReqm: id }
+      this.arcService.removeRequerimiento(this.rowService?._id, model)
+        .subscribe(res => {
+          this.message.create('success', `Requerimiento eliminado con exito`);
+          this.getDataById(this.rowService?._id)
+        })
+    } catch (error) {
+    }
+  }
+  deleteFile(id: string, nameFile:any, files:any): void {
+    let filess = files.filter((d:any) => d._id !== nameFile?._id);
+    this.editCache[id].data.archivos = filess
+    const index = this.listOfData.findIndex(item => item._id === id);
+    this.listOfData[index].archivos = filess
+  }
+  updateEditCache(): void {
+    this.listOfData.forEach(item => {
+      this.editCache[item._id] = {
+        edit: false,
+        data: { ...item }
+      };
+    });
   }
 }

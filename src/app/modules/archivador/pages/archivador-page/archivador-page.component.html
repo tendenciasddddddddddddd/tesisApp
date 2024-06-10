@@ -10,7 +10,7 @@
             </nz-input-group>
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
-            <button nz-button nzType="primary" (click)="showModal()"
+            <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
                 style="margin-top: 10px;margin-left: auto !important;">Agregar servicio</button>
         </div>
     </div>
@@ -34,7 +34,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data">
-                    <td>{{data.cliente?.nombres}}</td>
+                    <td>
+                        <div (click)="showModalArchiva(data)" style="cursor: pointer;color: blue;">
+                            {{data.cliente?.nombres}}
+                        </div>
+                    </td>
                     <td>{{data.servicio?.nombre}}</td>
                     <td>{{data.provincia }} / {{data.canton}}</td>
                     <td>$ {{data.total}}</td>
@@ -46,6 +50,7 @@
                         <nz-dropdown-menu #menu="nzDropdownMenu">
                             <ul nz-menu nzSelectable>
                                 <li nz-menu-item (click)="update(data)">Editar</li>
+                                <li nz-menu-item (click)="update(data)">Registrar pagos</li>
                                 <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
                             </ul>
                         </nz-dropdown-menu>
@@ -54,6 +59,7 @@
             </tbody>
         </nz-table>
     </ng-template>
+
     <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="false" [nzWidth]="1100" [nzVisible]="isVisible"
         nzTitle="Iniciar servicio" [nzFooter]="footerTpl" (nzOnClose)="handleCancel()">
         <form nz-form *nzDrawerContent nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" id="serv">
@@ -61,7 +67,8 @@
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24">Cliente</nz-form-label>
-                        <nz-select id="cliente" formControlName="cliente" nzPlaceHolder="Seleccione un cliente" style="width: 67%;">
+                        <nz-select id="cliente" formControlName="cliente" nzPlaceHolder="Seleccione un cliente"
+                            style="width: 67%;">
                             <nz-option *ngFor="let option of lisCliente" [nzLabel]="option.nombres"
                                 [nzValue]="option"></nz-option>
                         </nz-select>
@@ -82,7 +89,8 @@
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24">Servicios</nz-form-label>
-                        <nz-select id="servicio" formControlName="servicio" nzPlaceHolder="Seleccione un servicio" style="width: 67%;">
+                        <nz-select id="servicio" formControlName="servicio" nzPlaceHolder="Seleccione un servicio"
+                            style="width: 67%;">
                             <nz-option *ngFor="let option of lisServices" [nzLabel]="option.nombre"
                                 [nzValue]="option"></nz-option>
                         </nz-select>
@@ -94,7 +102,8 @@
                             <span>Provincia</span>
                         </nz-form-label>
                         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese la provincia!">
-                            <input nzSize="large" nz-input id="provincia" formControlName="provincia" autocomplete="off" />
+                            <input nzSize="large" nz-input id="provincia" formControlName="provincia"
+                                autocomplete="off" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -106,7 +115,8 @@
                             <span>Total</span>
                         </nz-form-label>
                         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese el total!">
-                            <input nzSize="large" type="number" nz-input id="total" formControlName="total" autocomplete="off" />
+                            <input nzSize="large" type="number" nz-input id="total" formControlName="total"
+                                autocomplete="off" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -123,7 +133,7 @@
             </div>
             <div nz-row [nzGutter]="8">
                 <div nz-col nzSpan="12">
-                   
+
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
@@ -131,7 +141,8 @@
                             <span>Parroquia</span>
                         </nz-form-label>
                         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="¡Por favor ingrese la parroquia!">
-                            <input nzSize="large" nz-input id="parroquia" formControlName="parroquia" autocomplete="off" />
+                            <input nzSize="large" nz-input id="parroquia" formControlName="parroquia"
+                                autocomplete="off" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -141,7 +152,8 @@
                     <nz-form-item>
                         <nz-form-label>Descriptción</nz-form-label>
                         <nz-form-control>
-                            <textarea id="mts" formControlName="mts" nz-input placeholder="porfavor ingrese una descripcion"
+                            <textarea id="mts" formControlName="mts" nz-input
+                                placeholder="porfavor ingrese una descripcion"
                                 [nzAutosize]="{ minRows: 4, maxRows: 4 }"></textarea>
                         </nz-form-control>
                     </nz-form-item>
@@ -150,9 +162,120 @@
         </form>
 
         <ng-template #footerTpl>
-            <div style="float: right">
-                <button nz-button style="margin-right: 8px;">CANCEL</button>
+            <div style="text-align: center;">
+                <button (click)="handleCancel()" nz-button style="margin-right: 8px;">CANCEL</button>
                 <button nz-button nzType="primary" form="serv">GUARAR CAMBIOS</button>
+            </div>
+        </ng-template>
+    </nz-drawer>
+
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="-1"
+        [nzVisible]="isVisibleArchivador" nzTitle="Procesos del tramite" [nzFooter]="footerTpl2"
+        (nzOnClose)="handleArchiCancel()">
+
+        <div *nzDrawerContent>
+            <button [nzSize]="'large'" (click)="addItem()" nz-button nzType="primary">Agregar requerimiento</button>
+            <nz-divider></nz-divider>
+            <div *ngIf="isLoad;else other_content2" class="centrar">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #other_content2>
+                <nz-table #basicTable2 [nzData]="listOfData" [nzScroll]="{ x: '2000px' }">
+                    <thead>
+                        <tr>
+                            <th>Asignado el: </th>
+                            <th>Departamento</th>
+                            <th>Asunto</th>
+                            <th>Subir archivo</th>
+                            <th>Nombre del documento</th>
+                            <th>Estado</th>
+                            <th>Responsable</th>
+                            <th nzRight>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable2.data">
+                            <ng-container *ngIf="!editCache[data._id]?.edit; else editTemplate">
+                                <td>{{data?.fecha?.substring(0, 10)}}</td>
+                                <td>{{data.departamento}}</td>
+                                <td>{{data.asunto}}</td>
+                                <td>
+                                    <div *ngFor="let item of data.archivos">
+                                       <a target="_blank" href="{{item.link}}" class="s-spans" >
+                                        <span nz-icon nzType="cloud-download" nzTheme="outline"></span>
+                                     {{item?.name?.substring(0, 18)}}
+                                     </a>
+                                    </div>
+                                </td>
+                                <td>{{data.nombreDoc}}</td>
+                                <td>{{data.estadoTramite}}</td>
+                                <td>{{data?.responsable?.nombre}}</td>
+                                <td nzRight>
+                                    <a (click)="startEdit(data._id)">Editar</a>
+                                    <nz-divider nzType="vertical"></nz-divider>
+                                    <a style="color: #ba2b2b;" nz-popconfirm nzPopconfirmTitle="¿Seguro que lo quieres eliminar?" 
+                                    (nzOnConfirm)="deleteRow(data._id)">Eliminar</a>
+                                </td>
+                            </ng-container>
+                            <ng-template #editTemplate>
+                                <td><nz-date-picker [(ngModel)]="editCache[data._id].data.fecha" ></nz-date-picker></td>
+                                <td><textarea type="text" nz-input [(ngModel)]="editCache[data._id].data.departamento"
+                                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea></td>
+                                <td><textarea type="text" nz-input [(ngModel)]="editCache[data._id].data.asunto" 
+                                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+                                </td>
+                                <td> 
+                                    <div *ngFor="let item of data.archivos">
+                                        <div class="s-spans"
+                                        nz-dropdown [nzDropdownMenu]="menus"
+                                        style="margin-bottom: 5px;"
+                                      >
+                                      {{item?.name?.substring(0, 18)}}
+                                      </div>
+                                       <nz-dropdown-menu #menus="nzDropdownMenu">
+                                        <ul nz-menu nzSelectable>
+                                            <li nz-menu-item>
+                                                <a target="_blank" href="{{item.link}}" style="cursor: pointer;">Mostrar</a> 
+                                            </li>
+                                            <li nz-menu-item >
+                                                <a style="color: #ba2b2b;" nz-popconfirm nzPopconfirmTitle="¿Seguro que lo quieres eliminar?" 
+                                                (nzOnConfirm)="deleteFile(data._id, item, data.archivos)">Eliminar</a>
+                                            </li>
+                                        </ul>
+                                    </nz-dropdown-menu>
+                                     </div>
+                                    <button nzBlock (click)="openWidget(data._id)" nz-button nzType="primary" 
+                                    nzShape="round" style="margin-top: 5px;background-color: rgb(29, 155, 240);">
+                                        <span nz-icon nzType="cloud-upload" nzTheme="outline"></span>
+                                        Subir archivo
+                                    </button>
+                                </td>
+                                <td><textarea type="text" nz-input [(ngModel)]="editCache[data._id].data.nombreDoc" 
+                                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+                                </td>
+                                <td>
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Seleccione un estado"
+                                        [(ngModel)]="editCache[data._id].data.estadoTramite">
+                                        <nz-option nzLabel="PENDIENTE" nzValue="PENDIENTE"></nz-option>
+                                        <nz-option nzLabel="CERRADO" nzValue="CERRADO"></nz-option>
+                                    </nz-select>
+                                </td>
+                                <td>{{data?.responsable?.nombre}}</td>
+                                <td nzRight>
+                                    <a nz-popconfirm nzPopconfirmTitle="¿Seguro que quiere guardar cambios?"
+                                    (nzOnConfirm)="saveEdit(data._id)" class="save">Guardar</a>
+                                    <nz-divider nzType="vertical"></nz-divider>
+                                    <a style="color: #478be6;" (click)="cancelEdit(data._id)">Cancelar </a>
+                                </td>
+                            </ng-template>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </ng-template>
+        </div>
+        <ng-template #footerTpl2>
+            <div style="text-align: center;">
+                <button [nzSize]="'large'" (click)="handleArchiCancel()" nz-button>CANCEL</button>
             </div>
         </ng-template>
     </nz-drawer>

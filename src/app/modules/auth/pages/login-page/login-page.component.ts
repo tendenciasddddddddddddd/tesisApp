@@ -42,8 +42,10 @@ export class LoginPageComponent implements OnInit {
     this.authService.sendCredentials(email, password)
       //TODO: 200 <400
       .subscribe(responseOk => { //TODO: Cuando el usuario credenciales Correctas ✔✔
-        console.log('Session iniciada correcta', responseOk);
-        const { tokenSession, data } = responseOk
+        
+        const { tokenSession, user } = responseOk
+        console.log('Session iniciada correcta', user);
+        localStorage.setItem("Usuario", JSON.stringify(user));
         this.cookie.set('token', tokenSession, 4, '/') //TODO:📌📌📌📌
         this.router.navigate(['/', 'tracks'])
       },

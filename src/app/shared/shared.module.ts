@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { HeaderUserComponent } from './components/header-user/header-user.component';
 import { ImgBrokenDirective } from './directives/img-broken.directive';
-
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 
 @NgModule({
@@ -16,7 +16,8 @@ import { ImgBrokenDirective } from './directives/img-broken.directive';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NzButtonModule
   ],
   exports: [
     SideBarComponent,

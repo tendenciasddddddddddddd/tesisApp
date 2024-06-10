@@ -20,7 +20,10 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 
 @NgModule({
@@ -46,7 +49,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzGridModule,
     NzSpinModule,
     NzDrawerModule,
-    NzSelectModule
+    NzSelectModule,
+    NzDatePickerModule,
+    NzPopconfirmModule,
+    NzPopoverModule,
+    NzIconModule
   ]
 })
 export class ArchivadorModule { }

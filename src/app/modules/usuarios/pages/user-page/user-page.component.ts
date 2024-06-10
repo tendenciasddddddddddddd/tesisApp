@@ -43,7 +43,7 @@ export class UserPageComponent implements OnInit {
       fullname: ['', [Validators.required]],
       telefono: ['', [Validators.required]],
       direccion: ['', [Validators.required]],
-      password: ['',],
+      password: ['',[Validators.required]],
       ifPassword: ['',],
     });
   }
@@ -68,11 +68,10 @@ export class UserPageComponent implements OnInit {
   }
   submitForm(): void {
     if (this.validateForm.valid) {
+      let newPass = this.validateForm.value.password
+      let newPassIS = crypt(newPass);
+      this.validateForm.controls['ifPassword'].setValue(newPassIS);
       if (this.keyId === '') {
-        let newPass = this.createPassword(this.validateForm.value.fullname, this.validateForm.value.cedula)
-        let newPassIS = this.crypt(newPass)
-        this.validateForm.controls['password'].setValue(newPass);
-        this.validateForm.controls['ifPassword'].setValue(newPassIS);
         this.useService.Save(this.validateForm.value)
           .subscribe(
             res => {
@@ -104,14 +103,6 @@ export class UserPageComponent implements OnInit {
     let l = apell.toLowerCase().charAt(0);
     let result = l + ced;
     return result;
-  }
-  crypt(data: string) {
-    const key = "imperio"
-    var crypted = "";
-    for (var i = 0; i < data.length; i++) {
-      crypted += String.fromCharCode(data.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-    };
-    return crypted;
   }
   showDeleteConfirm(key: string): void {
     this.modal.confirm({
@@ -154,13 +145,14 @@ export class UserPageComponent implements OnInit {
       })
   }
   update(data: any) {
+    let aux = crypt(data.ifPassword)
     this.keyId = data._id;
     this.validateForm.controls['fullname'].setValue(data.fullname);
     this.validateForm.controls['cedula'].setValue(data.cedula);
     this.validateForm.controls['telefono'].setValue(data.telefono);
     this.validateForm.controls['email'].setValue(data.email);
     this.validateForm.controls['direccion'].setValue(data.direccion);
-    this.validateForm.controls['password'].setValue(data.password);
+    this.validateForm.controls['password'].setValue(aux);
     this.validateForm.controls['ifPassword'].setValue(data.ifPassword);
     this.isVisible = true;
   }
@@ -249,4 +241,18 @@ export class UserPageComponent implements OnInit {
   handleCancelRole(): void {
     this.isRoles = false;
   }
+}
+
+const crypt = (data : any) => {
+  try {
+    const key = "imperio"
+  var crypted = "";
+  for (var i = 0; i < data.length; i++) {
+    crypted += String.fromCharCode(data.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  };
+  return crypted;
+  } catch (error) {
+    return 'security'
+  }
+  
 }

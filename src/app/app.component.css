@@ -1,0 +1,3 @@
+[data-theme=dark] *, body[data-theme=dark] {
+    scrollbar-color: #e4dede #262626 !important;
+}

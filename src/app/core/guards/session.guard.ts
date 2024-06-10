@@ -22,7 +22,6 @@ export class SessionGuard  {
 
   checkCookieSession(): boolean {
     try {
-
       const token: boolean = this.cookieService.check('token')
       if (!token) {
         this.router.navigate(['/', 'auth'])

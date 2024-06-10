@@ -96,6 +96,14 @@
                         <input nz-input id="direccion" formControlName="direccion" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>
+                        <span>Contraseña</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la Contraseña!">
+                        <input nz-input id="password" formControlName="password" autocomplete="off" type="password"/>
+                    </nz-form-control>
+                </nz-form-item>
             </form>
         </ng-container>
     </nz-modal>

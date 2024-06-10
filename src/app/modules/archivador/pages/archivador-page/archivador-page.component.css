@@ -1,6 +1,9 @@
 [nz-form] {
     min-width: 600px;
   }
+  [data-theme=dark] *, body[data-theme=dark] {
+    scrollbar-color: #e4dede #262626 !important;
+}
 
   .phone-select {
     width: 70px;
@@ -13,4 +16,14 @@
     display: flex;
     justify-content: center;
     margin-top: 150px;
+  }
+  .s-spans{
+    position: relative;
+    margin-bottom: 6px;
+    margin-right: 4px;
+    background-color: #526c03;
+    border-radius: 20px;
+    padding: 0 8px;
+    cursor: pointer;
+    color: #fff;
   }
