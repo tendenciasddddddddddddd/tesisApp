@@ -1,29 +1,48 @@
 [nz-form] {
-    min-width: 600px;
-  }
-  [data-theme=dark] *, body[data-theme=dark] {
-    scrollbar-color: #e4dede #262626 !important;
+  min-width: 600px;
 }
 
-  .phone-select {
-    width: 70px;
-  }
+[data-theme=dark] *,
+body[data-theme=dark] {
+  scrollbar-color: #e4dede #262626 !important;
+}
 
-  .register-are {
-    margin-bottom: 8px;
-  }
-  .centrar {
-    display: flex;
-    justify-content: center;
-    margin-top: 150px;
-  }
-  .s-spans{
-    position: relative;
-    margin-bottom: 6px;
-    margin-right: 4px;
-    background-color: #526c03;
-    border-radius: 20px;
-    padding: 0 8px;
-    cursor: pointer;
-    color: #fff;
-  }
+.phone-select {
+  width: 70px;
+}
+
+.register-are {
+  margin-bottom: 8px;
+}
+
+.centrar {
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+}
+
+.s-spans {
+  position: relative;
+  margin-bottom: 6px;
+  margin-right: 4px;
+  background-color: rgb(142 226 77 / 18%);
+  border-radius: 20px;
+  padding: 0 8px;
+  cursor: pointer;
+  color: rgb(123 218 75);
+}
+
+.s-separate {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.PaymentDetails {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+

@@ -36,3 +36,151 @@ button {
 button:disabled {
     opacity: .5;
 }
+
+.s-contenedor {
+    margin-top: 0.5rem;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+  }
+  
+  .s-centro {
+    text-align: center
+  }
+  
+  .s-derecha {
+    text-align: right
+  }
+  
+  .s-izquierda {
+    text-align: left
+  }
+  
+  .sf-12 {
+    font-size: 11px;
+  }
+  
+  .sf-14 {
+    font-size: 14px;
+  }
+  
+  .sf-16 {
+    font-size: 16px;
+  }
+  
+  .sf-20 {
+    font-size: 20px;
+  }
+  
+  .sfz-600 {
+    font-weight: 700;
+  }
+  
+  .s-parrafo {
+    text-align: justify;
+    line-height: 1.5;
+  }
+  
+  .s-tabla {
+    width: 100%;
+  }
+  
+  .s-p-justify {
+    width: 85%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  .s-first {
+    width: 15%;
+  }
+  
+  .s-last {
+    width: 70%;
+  }
+  
+  .s-fill {
+    width: 15%;
+  }
+  
+  .s-img {
+    height: 60px
+  }
+  
+  .s-img2 {
+    width: 60px
+  }
+  
+  .s-w-50 {
+    width: 50%;
+  }
+  .sb-button {
+    border-bottom: 1px solid #000;
+  }
+  
+  .sb-top {
+    border-top: 1px solid #000;
+  }
+  
+  .sb-right {
+    border-right: 1px solid #000;
+  }
+  .s-pd8-10{
+    padding: 8px 10px;
+  }
+  .s-pd13{
+    padding: 1px 3px;
+  }
+  .s-pd12{
+    padding: 1px 2px;
+  }
+  .sf-104 {
+    font-size: 10.4px;
+  }
+  .s-basetb{
+    border-style: solid;border-width: 0px 1px 1px;max-width: 100%; width: 100%; border-spacing: 0; border-collapse: separate;
+  }
+  .s-tabla {
+    width: 100%;
+  }
+  .s-caja-client {
+    border: 1px solid #000000; border-radius: 10px; padding: 7px;margin-top: 8px;margin-bottom: 10px;
+  }
+  .s-logo{
+    width: 100px; height: 70px; border-radius: 6px;
+}
+.s-titulo{
+    color:#000;font-weight: 600;font-size: 1.3rem;line-height: 1.375;
+}
+.s-text-center{
+    text-align: center!important;
+}
+.p-4 {
+    padding: 1.5rem !important;
+}
+.s-hojas {
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, .12);
+    margin-bottom: 20px;
+    min-height: 180mm;
+}
+.s-width10{
+    width: 10%; 
+}
+.s-width80{
+    width: 80%; 
+}
+.s-width20{
+    width: 20%; 
+}
+.s-width100{
+    width: 100%; 
+}
+.s-width65{
+    width: 65%; 
+}
+.s-width35{
+    width: 35%; 
+}
+.s-top7{
+    margin-top: 7px;
+}

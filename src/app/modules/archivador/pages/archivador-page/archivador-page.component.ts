@@ -45,13 +45,17 @@ export class ArchivadorPageComponent implements OnInit {
   isLoad: boolean = false;
   isVisible = false;
   isVisibleArchivador = false;
+  isVisiblePagos = false;
+  isVisibleComprobante = false;
+  isLoading = false;
   keyId: string = '';
   keyIdSelected: string = '';
   rowService: any = {};
   cliente: string = '';
-  usuario:any={}
+  usuario: any = {}
   lisDto: any = [];
   rowRequirimiento: any = [];
+  listOfPagos: any = [];
   lisCliente: any = [];
   lisServices: any = [];
   departamento: string = '';
@@ -66,6 +70,16 @@ export class ArchivadorPageComponent implements OnInit {
     cliente: FormControl<string>;
     servicio: FormControl<string>;
   }>;
+  tipo: string = '';
+  monto: string = '';
+  totalAbonos: number = 0;
+  porcAbonos: number = 0;
+  facturaHtml: any = {};
+  userControl = new FormControl('');
+  form2 = new FormGroup({
+    tipo: this.userControl,
+    monto: this.userControl,
+  });
   constructor(private arcService: ArchivaService,
     private fb: NonNullableFormBuilder, private modal: NzModalService, private message: NzMessageService
   ) {
@@ -129,8 +143,6 @@ export class ArchivadorPageComponent implements OnInit {
   }
   submitForm(): void {
     if (this.validateForm.valid) {
-      console.log(this.cliente);
-      //this.validateForm.controls['cliente'].setValue(this.cliente);
       if (this.keyId === '') {
         this.arcService.Save(this.validateForm.value)
           .subscribe(
@@ -317,8 +329,8 @@ export class ArchivadorPageComponent implements OnInit {
     } catch (error) {
     }
   }
-  deleteFile(id: string, nameFile:any, files:any): void {
-    let filess = files.filter((d:any) => d._id !== nameFile?._id);
+  deleteFile(id: string, nameFile: any, files: any): void {
+    let filess = files.filter((d: any) => d._id !== nameFile?._id);
     this.editCache[id].data.archivos = filess
     const index = this.listOfData.findIndex(item => item._id === id);
     this.listOfData[index].archivos = filess
@@ -331,4 +343,116 @@ export class ArchivadorPageComponent implements OnInit {
       };
     });
   }
+  /* ------- Pagos ------ */
+  getDataByIdPagos(id: string) {
+    this.isLoad = true;
+    this.totalAbonos = 0
+    this.porcAbonos = 0
+    this.arcService.getById(id)
+      .subscribe(
+        res => {
+          let data: any = res;
+          this.listOfPagos = [...data.pagos];
+          this.isLoad = false;
+          for (let i = 0; i < this.listOfPagos.length; i++) {
+            const element = this.listOfPagos[i];
+            this.totalAbonos = this.totalAbonos + Number(element.monto)
+          }
+          let porcen = (Number(this.totalAbonos) / Number(this.rowService.total)) * 100
+          porcen = Math.round(porcen);
+          this.porcAbonos = porcen
+        },
+      )
+  }
+  openPagos(data: any): void {
+    this.rowService = data
+    this.getDataByIdPagos(this.rowService?._id)
+    this.isVisiblePagos = true;
+  }
+  closePagos(): void {
+    this.isVisiblePagos = false;
+  }
+  submitPagos() {
+    let isMonto = Number(this.monto)
+    if (isMonto <= 0 || isNaN(isMonto)) {
+      this.message.create('error', `Error en el valor del pago`);
+      return
+    }
+    if (this.tipo == '' || !this.tipo) {
+      this.message.create('error', `Error en la forma de pago`);
+      return
+    }
+    let allPagos = Number(this.monto) + Number(this.totalAbonos)
+    let allTotal = Number(this.rowService.total)
+    if (allPagos > allTotal) {
+      this.message.create('error', `Error el total de pagos supera el total a pagar`);
+      return
+    }
+    const model = {
+      tipo: this.tipo,
+      monto: this.monto,
+      fecha: new Date(),
+      text: 'Abono servicio'
+    }
+    this.arcService.updateAbona(this.rowService?._id, model)
+      .subscribe(res => {
+        this.message.create('success', `Pago registrado con exito`);
+        this.tipo = ''
+        this.monto = ''
+        this.getDataByIdPagos(this.rowService?._id)
+      })
+  }
+  deleteRowPagos(id: string): void {
+    try {
+      let model = { keyPagos: id }
+      this.arcService.removePagos(this.rowService?._id, model)
+        .subscribe(res => {
+          this.message.create('success', `Pago eliminado con exito`);
+          this.getDataByIdPagos(this.rowService?._id)
+        })
+    } catch (error) {
+    }
+  }
+
+  /*Imprimir comprobante */
+  openComprobante(data: any): void {
+    this.rowService = data
+    this.getComprobante(this.rowService)
+    this.isVisibleComprobante = true;
+  }
+  closeComprobante(): void {
+    this.isVisibleComprobante = false;
+  }
+
+  getComprobante(data: string) {
+    this.isLoad = true;
+    this.arcService.Comprobante(data)
+      .subscribe(
+        res => {
+          let data: any = res;
+          this.facturaHtml = data
+          this.isLoad = false;
+        },
+      )
+  }
+  builfPdf() {
+    try {
+      this.isLoad = true;
+      this.arcService.builfPdf(this.rowService)
+        .subscribe(
+          res => {
+            let data: any = res;
+            let a = document.createElement('a');
+            a.target = '_blank';
+            a.href = data
+            a.click();;
+            this.isLoad = false;
+          },
+        )
+    } catch (error) {
+      this.isLoad = false;
+    }
+  }
 }
+
+

@@ -31,8 +31,14 @@ export class ArchivaService {
   updateRequerimiento(id: string ,data: any) {
     return this.http.put(`${this.URL}/archivador/updateRequerimiento/${id}`,data);
   }
+  updateAbona(id: string ,data: any) {
+    return this.http.put(`${this.URL}/archivador/abona/${id}`,data);
+  }
   removeRequerimiento(id: string ,data: any) {
     return this.http.put(`${this.URL}/archivador/removeRequerimiento/${id}`,data);
+  }
+  removePagos(id: string ,data: any) {
+    return this.http.put(`${this.URL}/archivador/removePagos/${id}`,data);
   }
 
   listCliente() {
@@ -40,5 +46,12 @@ export class ArchivaService {
   }
   listServicio() {
     return this.http.get(`${this.URL}/servicios/list`);
+  }
+
+  Comprobante(data: any) {
+    return this.http.post(`${this.URL}/reportes/`,data);
+  }
+  builfPdf(data: any) {
+    return this.http.post(`${this.URL}/reportes/buildpdf/`,data);
   }
 }

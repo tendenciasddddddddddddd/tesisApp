@@ -24,6 +24,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzDatePickerModule,
     NzPopconfirmModule,
     NzPopoverModule,
-    NzIconModule
+    NzIconModule,
+    NzProgressModule
   ]
 })
 export class ArchivadorModule { }
