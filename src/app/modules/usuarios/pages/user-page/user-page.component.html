@@ -108,7 +108,7 @@
         </ng-container>
     </nz-modal>
     <nz-modal [nzStyle]="{width:'550px'}" nzCentered [(nzVisible)]="isRoles" nzTitle="Roles de usuario"
-    (nzOnCancel)="handleCancelRole()">
+    (nzOnCancel)="handleCancelRole()" (nzOnOk)="handleOk()">
     <ng-container *nzModalContent>
         <div nz-row class="login-form-margin">
             <div nz-col [nzSpan]="8">

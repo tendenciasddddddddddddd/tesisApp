@@ -1,3 +1,28 @@
 <div class="tracks-page">
-  <h1>Pagina de inicio</h1>
+  <h1>Bienvenido, {{usuario?.nombre}}</h1>
+  <div *ngIf="isLoads;else other_content" class="centrar">
+    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+</div>
+<ng-template #other_content>
+  <div style="background: #000;padding:30px;">
+    <div nz-row [nzGutter]="8">
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="Clientes">
+          <p>Un total de {{clientes}} clientes</p>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="Servicios">
+          <p>Un total de {{servicios}} servicios</p>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="Tramites">
+          <p>Un total de {{archivador}} tramites</p>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+</ng-template>
+  
 </div>

@@ -47,6 +47,7 @@ export class ArchivadorPageComponent implements OnInit {
   isVisibleArchivador = false;
   isVisiblePagos = false;
   isVisibleComprobante = false;
+  isVisibleAbonos = false;
   isLoading = false;
   keyId: string = '';
   keyIdSelected: string = '';
@@ -69,6 +70,7 @@ export class ArchivadorPageComponent implements OnInit {
     sector: FormControl<string>;
     cliente: FormControl<string>;
     servicio: FormControl<string>;
+    estado: FormControl<boolean>;
   }>;
   tipo: string = '';
   monto: string = '';
@@ -76,10 +78,15 @@ export class ArchivadorPageComponent implements OnInit {
   porcAbonos: number = 0;
   facturaHtml: any = {};
   userControl = new FormControl('');
+  temporal: any = {}
   form2 = new FormGroup({
     tipo: this.userControl,
     monto: this.userControl,
   });
+  roles: any = []
+  rolAdmin: boolean = false;
+  rolTramitador: boolean = false;
+  rolSecretaria: boolean = false;
   constructor(private arcService: ArchivaService,
     private fb: NonNullableFormBuilder, private modal: NzModalService, private message: NzMessageService
   ) {
@@ -92,6 +99,7 @@ export class ArchivadorPageComponent implements OnInit {
       sector: ['', [Validators.required]],
       cliente: ['', [Validators.required]],
       servicio: ['', [Validators.required]],
+      estado: [false],
     });
   }
 
@@ -122,6 +130,10 @@ export class ArchivadorPageComponent implements OnInit {
     );
     this.usuario = localStorage.getItem('Usuario');
     this.usuario = JSON.parse(this.usuario)
+    this.roles = this.usuario?.role;
+    if(this.roles.includes('Admin'))this.rolAdmin = true;
+    if(this.roles.includes('Tramitador'))this.rolTramitador = true;
+    if(this.roles.includes('Secretaria'))this.rolSecretaria = true;
   }
   openWidget(id: any) {
     this.keyIdSelected = id;
@@ -169,6 +181,32 @@ export class ArchivadorPageComponent implements OnInit {
           control.updateValueAndValidity({ onlySelf: true });
         }
       });
+    }
+  }
+  finalizarTramite() {
+    try {
+      if (this.listOfData.length === 0) {
+        this.message.create('error', `Error, no existen requerimientos`);
+        return
+      }
+      const ifPendiente = this.listOfData.filter(d => d.estadoTramite === "PENDIENTE")
+      if (ifPendiente.length > 0) {
+        this.message.create('error', `Error, existen requerimientos pendientes`);
+        return
+      }
+      const model = { estado: true }
+      this.isLoad = true;
+      this.arcService.Update(this.rowService?._id, model)
+        .subscribe(
+          res => {
+            this.message.create('success', `Tramite finalizado con exito`);
+            this.isLoad = false;
+            this.handleArchiCancel()
+            this.getData();
+            this.validateForm.reset();
+          })
+    } catch (error) {
+      console.log(error);
     }
   }
   showDeleteConfirm(key: string): void {
@@ -262,6 +300,7 @@ export class ArchivadorPageComponent implements OnInit {
 
   /*Matrix de archivos */
   showModalArchiva(data: any): void {
+    if(!this.rolAdmin && !this.rolTramitador)return;
     this.rowService = data
     this.getDataById(this.rowService?._id)
     this.isVisibleArchivador = true;
@@ -270,6 +309,11 @@ export class ArchivadorPageComponent implements OnInit {
     this.isVisibleArchivador = false;
   }
   addItem(): void {
+    const ifPendiente = this.listOfData.filter(d => d.estadoTramite === "PENDIENTE")
+    if (ifPendiente.length > 0) {
+      this.message.create('error', `Error, existen requerimientos pendientes`);
+      return
+    }
     try {
       let info = {
         fecha: new Date(),
@@ -453,6 +497,40 @@ export class ArchivadorPageComponent implements OnInit {
       this.isLoad = false;
     }
   }
+  printAbonos(data: any): void {
+    this.getComprobanteAbono(data)
+    this.temporal = data
+    this.isVisibleAbonos = true;
+  }
+  getComprobanteAbono(data: string) {
+    this.isLoad = true;
+    const model = {data:data, info:this.rowService, abonos:this.totalAbonos}
+    this.arcService.ComprobanteAbonos(model)
+      .subscribe(
+        res => {
+          let data: any = res;
+          this.facturaHtml = data
+          this.isLoad = false;
+        },
+      )
+  }
+  builfPdfAbonos() {
+    try {
+      this.isLoad = true;
+      const model = {data:this.temporal, info:this.rowService, abonos:this.totalAbonos}
+      this.arcService.builfPdfAbonos(model)
+        .subscribe(
+          res => {
+            let data: any = res;
+            let a = document.createElement('a');
+            a.target = '_blank';
+            a.href = data
+            a.click();
+            this.isLoad = false;
+          },
+        )
+    } catch (error) {
+      this.isLoad = false;
+    }
+  }
 }
-
-

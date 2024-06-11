@@ -54,4 +54,10 @@ export class ArchivaService {
   builfPdf(data: any) {
     return this.http.post(`${this.URL}/reportes/buildpdf/`,data);
   }
+  ComprobanteAbonos(data: any) {
+    return this.http.post(`${this.URL}/reportes/abonos`,data);
+  }
+  builfPdfAbonos(data: any) {
+    return this.http.post(`${this.URL}/reportes/buildpdfabonos/`,data);
+  }
 }

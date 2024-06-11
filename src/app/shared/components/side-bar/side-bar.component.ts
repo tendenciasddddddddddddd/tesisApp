@@ -17,6 +17,8 @@ export class SideBarComponent implements OnInit {
   usuario: any = {}
   roles: any = []
   rolAdmin: boolean = false;
+  rolTramitador: boolean = false;
+  rolSecretaria: boolean = false;
 
   constructor(private router: Router, private cookieService: CookieService) { }
 
@@ -25,23 +27,24 @@ export class SideBarComponent implements OnInit {
     this.usuario = localStorage.getItem('Usuario');
     this.usuario = JSON.parse(this.usuario)
     this.roles = this.usuario?.role;
-    console.log(this.usuario, this.roles);
-    if(this.roles.includes('Admin')){
-      this.rolAdmin = true;
-    }
-    console.log(this.rolAdmin);
+    if(this.roles.includes('Admin'))this.rolAdmin = true;
+    if(this.roles.includes('Tramitador'))this.rolTramitador = true;
+    if(this.roles.includes('Secretaria'))this.rolSecretaria = true;
     this.mainMenu.defaultOptions = [
       {
+        estado : this.rolAdmin || this.rolTramitador || this.rolSecretaria,
         name: 'Inicio',
         icon: 'uil uil-estate',
         router: ['/', 'tracks']
       },
       {
+        estado : this.rolAdmin || this.rolTramitador || this.rolSecretaria,
         name: 'Clientes',
         icon: 'uil uil-users-alt',
         router: ['/', 'clientes']
       },
       {
+        estado : this.rolAdmin || this.rolTramitador ,
         name: 'Servicios',
         icon: 'uil uil-chart',
         router: ['/', 'servicios'],
@@ -51,16 +54,19 @@ export class SideBarComponent implements OnInit {
 
     this.mainMenu.accessLink = [
       {
+        estado : this.rolAdmin || this.rolTramitador || this.rolSecretaria,
         name: 'Archivador',
         icon: 'uil-clouds',
         router: ['/', 'archivador']
       },
       {
+        estado : this.rolAdmin || this.rolTramitador,
         name: 'Finalizados',
         icon: 'uil-comment-check',
         router: ['/', 'finalizados']
       },
       {
+        estado : this.rolAdmin || this.rolSecretaria,
         name: 'Caja',
         icon: 'uil-dollar-sign',
         router: ['/', 'caja']
@@ -75,6 +81,7 @@ export class SideBarComponent implements OnInit {
 
     this.customOptions = [
       {
+        estado : this.rolAdmin,
         icon: 'uil uil-chart',
         name: 'Agencia',
         router: ['/', 'agencia']
@@ -93,7 +100,6 @@ export class SideBarComponent implements OnInit {
     console.log($event)
   }
   final(){
-    this.router.navigate(['/', 'auth'])
     this.cookieService.delete('token')
     localStorage.clear();
     window.location.reload()

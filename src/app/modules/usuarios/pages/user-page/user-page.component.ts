@@ -232,7 +232,7 @@ export class UserPageComponent implements OnInit {
   }
 
   handleOk(): void {
-    this.isVisible = false;
+    this.isRoles = false;
   }
 
   handleCancel(): void {

@@ -10,7 +10,7 @@
             </nz-input-group>
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
-            <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
+            <button *ngIf="rolAdmin || rolTramitador" [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
                 style="margin-top: 10px;margin-left: auto !important;">Agregar servicio</button>
         </div>
     </div>
@@ -34,14 +34,19 @@
             </thead>
             <tbody>
                 <tr *ngFor="let data of basicTable.data">
-                    <td>
-                        <div (click)="showModalArchiva(data)" style="cursor: pointer;color: blue;">
+                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                        <div (click)="showModalArchiva(data)" style="cursor: pointer;">
                             {{data.search1}}
                         </div>
                     </td>
-                    <td>{{data.search2}}</td>
-                    <td>{{data.provincia }} / {{data.canton}}</td>
-                    <td>$ {{data.total}}</td>
+                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                        {{data.search2}}
+                    </td>
+                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                        {{data.provincia }} / {{data.canton}}
+                    </td>
+                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                        $ {{data.total}}</td>
                     <td>
                         <a nz-dropdown [nzDropdownMenu]="menu">
                             Acción
@@ -49,10 +54,10 @@
                         </a>
                         <nz-dropdown-menu #menu="nzDropdownMenu">
                             <ul nz-menu nzSelectable>
-                                <li nz-menu-item (click)="update(data)">Editar</li>
-                                <li nz-menu-item (click)="openPagos(data)">Registrar pagos</li>
-                                <li nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
-                                <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
+                                <li *ngIf="rolAdmin || rolTramitador" nz-menu-item (click)="update(data)">Editar</li>
+                                <li *ngIf="rolAdmin || rolSecretaria" nz-menu-item (click)="openPagos(data)">Registrar pagos</li>
+                                <li *ngIf="rolAdmin || rolSecretaria" nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
+                                <li *ngIf="rolAdmin ||rolTramitador" nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
                             </ul>
                         </nz-dropdown-menu>
                     </td>
@@ -278,6 +283,9 @@
         <ng-template #footerTpl2>
             <div style="text-align: center;">
                 <button [nzSize]="'large'" (click)="handleArchiCancel()" nz-button>CANCEL</button>
+                <nz-divider nzType="vertical"></nz-divider>
+                <button [nzSize]="'large'" nz-popconfirm nzPopconfirmTitle="¿Seguro que quiere dar por finalizado este tramite?"
+                (nzOnConfirm)="finalizarTramite()" nz-button nzType="primary">FINALIZAR ESTE TRAMITE</button>
             </div>
         </ng-template>
     </nz-drawer>
@@ -345,7 +353,7 @@
                             <td>{{ data.tipo }}</td>
                             <td>{{ (data.monto).toFixed(2)}}</td>
                             <td>
-                                <!-- <a>Action </a> -->
+                                <a (click)="printAbonos(data)">Imprimir</a>
                                 <nz-divider nzType="vertical"></nz-divider>
                                 <a style="color: #ba2b2b;" nz-popconfirm
                                     nzPopconfirmTitle="¿Seguro que lo quieres eliminar?"
@@ -385,6 +393,30 @@
                 <nz-divider nzType="vertical"></nz-divider>
                 <button [nzSize]="'large'" (click)="builfPdf()" nzType="primary" nz-button>DESCARGAR
                     COMPROBANTE</button>
+            </div>
+        </ng-template>
+    </nz-drawer>
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="1000"
+        [nzVisible]="isVisibleAbonos" nzTitle="Abonos" [nzFooter]="footerTpl5"
+        (nzOnClose)="isVisibleAbonos = false">
+
+        <div *nzDrawerContent>
+            <div *ngIf="isLoad;else other_content2" class="centrar">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #other_content2>
+                <section v-else id="box" class="PaymentDetails" style="max-width: 160mm;">
+                    <div [innerHTML]="facturaHtml"></div>
+                </section>
+            </ng-template>
+
+        </div>
+        <ng-template #footerTpl5>
+            <div style="text-align: center;">
+                <button [nzSize]="'large'" (click)="closeComprobante()" nz-button>CANCEL</button>
+                <nz-divider nzType="vertical"></nz-divider>
+                <button [nzSize]="'large'" (click)="builfPdfAbonos()" nzType="primary" nz-button>DESCARGAR
+                    COMPROBANTE ABONOS</button>
             </div>
         </ng-template>
     </nz-drawer>
