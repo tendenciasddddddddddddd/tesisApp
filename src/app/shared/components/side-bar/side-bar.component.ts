@@ -14,10 +14,22 @@ export class SideBarComponent implements OnInit {
   } = { defaultOptions: [], accessLink: [] }
 
   customOptions: Array<any> = []
+  usuario: any = {}
+  roles: any = []
+  rolAdmin: boolean = false;
 
   constructor(private router: Router, private cookieService: CookieService) { }
 
   ngOnInit(): void {
+   
+    this.usuario = localStorage.getItem('Usuario');
+    this.usuario = JSON.parse(this.usuario)
+    this.roles = this.usuario?.role;
+    console.log(this.usuario, this.roles);
+    if(this.roles.includes('Admin')){
+      this.rolAdmin = true;
+    }
+    console.log(this.rolAdmin);
     this.mainMenu.defaultOptions = [
       {
         name: 'Inicio',
@@ -51,9 +63,10 @@ export class SideBarComponent implements OnInit {
       {
         name: 'Caja',
         icon: 'uil-dollar-sign',
-        router: ['/', 'usuari']
+        router: ['/', 'caja']
       },
       {
+        estado : this.rolAdmin,
         name: 'Usuarios',
         icon: 'uil-user-plus',
         router: ['/', 'usuarios']
@@ -67,7 +80,6 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'agencia']
       },
     ]
-
   }
 
   goTo($event: any): void {
@@ -86,4 +98,5 @@ export class SideBarComponent implements OnInit {
     localStorage.clear();
     window.location.reload()
   }
+
 }

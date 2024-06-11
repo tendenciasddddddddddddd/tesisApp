@@ -184,3 +184,24 @@ button:disabled {
 .s-top7{
     margin-top: 7px;
 }
+
+.ant-result-info .ant-result-icon > .anticon {
+  color: #177ddc !important;
+}
+
+.s-tabla {
+  width: 100%;
+}
+
+.w25 {
+  height: 25%;
+}
+.w15 {
+  height: 15%;
+}
+.w45 {
+  height: 45%;
+}
+.t7{
+  margin-top: 3rem;
+}

@@ -1,1 +1,184 @@
-<p>caja-page works!</p>
+<div class="history-page" style="margin-top: 10px;">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+        <div nz-col nzSpan="12">
+            <h2 nz-typography>Gestión de Caja</h2>
+        </div>
+        <div nz-col nzSpan="12">
+            <div style="text-align: end;">
+                <button class="s-separates" nz-button (click)="openComprobante()">Imprimir detalles</button>
+            </div>
+
+        </div>
+    </div>
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
+
+    <div *ngIf="isLoads;else other_content" class="centrar">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+    <ng-template #other_content>
+        <nz-tabset nzType="card">
+            <nz-tab nzTitle="Total dinero">
+                <div *ngIf="estadoCaja;else other_estado">
+                    <nz-result nzStatus="success" nzTitle="Saldo total de caja es de $ {{total}} "
+                        nzSubTitle="Esta caja es el resumen de ingresos y egresos registrado en el sistema por dia.">
+                        <div nz-result-extra>
+                            <button nz-button (click)="showCerrarcajaConfirm()" nzType="primary">Cerrar caja</button>
+                            <button nz-button (click)="showDeleteConfirm()">Eliminar caja</button>
+                        </div>
+                    </nz-result>
+                </div>
+                <ng-template #other_estado>
+                    <nz-result nzStatus="info" nzTitle="No hay caja abierta en este punto">
+                        <div nz-result-extra>
+                            <button (click)="showModal()" nz-button nzType="primary">Abrir caja</button>
+                        </div>
+                    </nz-result>
+                </ng-template>
+            </nz-tab>
+            <nz-tab nzTitle="Registrar ingresos">
+                <div *ngIf="estadoCaja;else other_ingreso" style="margin-top: 20px;">
+                    <div *ngFor="let control of listOfControl;index as i">
+                        <div nz-row>
+                            <div nz-col nzSpan="8" class="s-separate">
+                                <input nz-input placeholder="Motivo {{i +1}}" [attr.id]="control.id"
+                                    [(ngModel)]="control.text" autocomplete="off"/>
+                            </div>
+                            <div nz-col nzSpan="8" class="s-separate">
+                                <input nz-input placeholder="Valor {{i +1}}" [attr.id]="control.id"
+                                    [(ngModel)]="control.monto" autocomplete="off" type="number"/>
+                            </div>
+                            <div nz-col nzSpan="8" class="s-separate">
+                                <span style="font-size: 30px;" nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
+                                    (click)="removeField(control, $event)"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <br>
+                        <button nzBlock nz-button nzType="dashed" class="add-button" (click)="addField($event)">
+                            <span nz-icon nzType="plus"></span>
+                            Agragar fila
+                        </button>
+                    </div>
+                    <br>
+                    <button nzBlock nz-button nzType="primary" class="add-button" (click)="saveIngresos()">
+                        Guardar cambios
+                    </button>
+                </div>
+                <ng-template #other_ingreso>
+                    <nz-result nzStatus="info" nzTitle="No hay caja abierta en este punto">
+                        <div nz-result-extra>
+                            <button (click)="showModal()" nz-button nzType="primary">Abrir caja</button>
+                        </div>
+                    </nz-result>
+                </ng-template>
+            </nz-tab>
+            <nz-tab nzTitle="Registrar gastos">
+                <div *ngIf="estadoCaja;else other_ingreso" style="margin-top: 20px;">
+                    <div *ngFor="let control of listOfGastos;index as i">
+                        <div nz-row>
+                            <div nz-col nzSpan="8" class="s-separate">
+                                <input nz-input placeholder="Motivo {{i +1}}" [attr.id]="control.id"
+                                    [(ngModel)]="control.text" autocomplete="off"/>
+                            </div>
+                            <div nz-col nzSpan="8" class="s-separate">
+                                <input nz-input placeholder="Valor {{i +1}}" [attr.id]="control.id"
+                                    [(ngModel)]="control.monto" autocomplete="off" type="number"/>
+                            </div>
+                            <div nz-col nzSpan="8" class="s-separate">
+                                <span style="font-size: 30px;" nz-icon nzType="minus-circle-o" class="dynamic-delete-button"
+                                    (click)="removeFieldGasto(control, $event)"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <br>
+                        <button nzBlock nz-button nzType="dashed" class="add-button" (click)="addFieldGastos($event)">
+                            <span nz-icon nzType="plus"></span>
+                            Agragar fila
+                        </button>
+                    </div>
+                    <br>
+                    <button nzBlock nz-button nzType="primary" class="add-button" (click)="saveGastos()">
+                        Guardar cambios
+                    </button>
+                </div>
+                <ng-template #other_ingreso>
+                    <nz-result nzStatus="info" nzTitle="No hay caja abierta en este punto">
+                        <div nz-result-extra>
+                            <button (click)="showModal()" nz-button nzType="primary">Abrir caja</button>
+                        </div>
+                    </nz-result>
+                </ng-template>
+            </nz-tab>
+            <nz-tab nzTitle="Historial de cajas">
+                <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="rowDtoHistory">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Caja inicial</th>
+                            <th>Total</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable.data">
+                            <td>
+                                <div  style="cursor: pointer;color: blue;">
+                                    {{data.fecha}}
+                                </div>
+                            </td>
+                            <td>{{data.detalles.cajaInicial}}</td>
+                            <td>$ {{data.detalles.total}}</td>
+                            <td>{{data.detalles.responsable}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+        </nz-tabset>
+    </ng-template>
+
+    <nz-modal [nzStyle]="{width:'700px'}" nzCentered [(nzVisible)]="isVisible" nzTitle="Clientes"
+        (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm()">
+        <ng-container *nzModalContent>
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cajaInicial" nzRequired>
+                        <span>Monto caja inicial $</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese valor inicial!">
+                        <input nzSize="large" nz-input id="cajaInicial" formControlName="cajaInicial"
+                            autocomplete="off" />
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </ng-container>
+    </nz-modal>
+
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="1000"
+        [nzVisible]="isVisibleComprobante" nzTitle="Comprobante" [nzFooter]="footerTpl4"
+        (nzOnClose)="closeComprobante()">
+
+        <div *nzDrawerContent>
+            <div *ngIf="isLoads;else other_content2" class="centrar">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #other_content2>
+                <section v-else id="box" class="PaymentDetails" style="max-width: 200mm;">
+                    <div [innerHTML]="facturaHtml"></div>
+                </section>
+            </ng-template>
+
+        </div>
+        <ng-template #footerTpl4>
+            <div style="text-align: center;">
+                <button [nzSize]="'large'" (click)="closeComprobante()" nz-button>CANCEL</button>
+                <nz-divider nzType="vertical"></nz-divider>
+                <!-- <button [nzSize]="'large'" (click)="builfPdf()" nzType="primary" nz-button>DESCARGAR
+                    COMPROBANTE</button> -->
+            </div>
+        </ng-template>
+    </nz-drawer>
+</div>

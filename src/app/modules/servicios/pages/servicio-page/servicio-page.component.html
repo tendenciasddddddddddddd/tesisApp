@@ -9,8 +9,9 @@
                     (keyup.enter)="search(searchText.value)"/>
             </nz-input-group>
         </div>
+        <div></div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
-            <button nz-button nzType="primary" (click)="showModal()"
+            <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
                 style="margin-top: 10px;margin-left: auto !important;">Crear servicio</button>
         </div>
     </div>
@@ -62,7 +63,7 @@
                         <span>Nombre servicio</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el servicio!">
-                        <input nz-input id="nombre" formControlName="nombre" autocomplete="off"/>
+                        <input nzSize="large" nz-input id="nombre" formControlName="nombre" autocomplete="off"/>
                     </nz-form-control>
                 </nz-form-item>
             </form>

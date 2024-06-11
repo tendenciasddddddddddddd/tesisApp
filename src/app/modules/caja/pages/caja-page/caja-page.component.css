@@ -1,0 +1,36 @@
+[nz-form] {
+    max-width: 600px;
+  }
+
+  .phone-select {
+    width: 70px;
+  }
+
+  .register-are {
+    margin-bottom: 8px;
+  }
+  .centrar {
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+  }
+  .s-separates{
+    margin-right: 12px;
+
+  }
+  .ant-result-info .ant-result-icon > .anticon {
+    color: #177ddc !important;
+}
+.s-separate {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 15px;
+}
+.PaymentDetails {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}

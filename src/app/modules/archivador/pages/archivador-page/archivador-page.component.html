@@ -364,26 +364,28 @@
         </ng-template>
     </nz-drawer>
 
-    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="1000" [nzVisible]="isVisibleComprobante"
-    nzTitle="Comprobante" [nzFooter]="footerTpl4" (nzOnClose)="closeComprobante()">
+    <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="1000"
+        [nzVisible]="isVisibleComprobante" nzTitle="Comprobante" [nzFooter]="footerTpl4"
+        (nzOnClose)="closeComprobante()">
 
-    <div *nzDrawerContent>
-        <div *ngIf="isLoad;else other_content2" class="centrar">
-            <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+        <div *nzDrawerContent>
+            <div *ngIf="isLoad;else other_content2" class="centrar">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            </div>
+            <ng-template #other_content2>
+                <section v-else id="box" class="PaymentDetails" style="max-width: 160mm;">
+                    <div [innerHTML]="facturaHtml"></div>
+                </section>
+            </ng-template>
+
         </div>
-        <ng-template #other_content2>
-            <section v-else id="box" class="PaymentDetails" style="max-width: 160mm;">
-                <div [innerHTML]="facturaHtml"></div>
-            </section>
+        <ng-template #footerTpl4>
+            <div style="text-align: center;">
+                <button [nzSize]="'large'" (click)="closeComprobante()" nz-button>CANCEL</button>
+                <nz-divider nzType="vertical"></nz-divider>
+                <button [nzSize]="'large'" (click)="builfPdf()" nzType="primary" nz-button>DESCARGAR
+                    COMPROBANTE</button>
+            </div>
         </ng-template>
-
-    </div>
-    <ng-template #footerTpl4>
-        <div style="text-align: center;">
-            <button [nzSize]="'large'" (click)="closeComprobante()" nz-button>CANCEL</button>
-            <nz-divider nzType="vertical"></nz-divider>
-            <button [nzSize]="'large'" (click)="builfPdf()" nzType="primary" nz-button>DESCARGAR COMPROBANTE</button>
-        </div>
-    </ng-template>
-</nz-drawer>
+    </nz-drawer>
 </div>
