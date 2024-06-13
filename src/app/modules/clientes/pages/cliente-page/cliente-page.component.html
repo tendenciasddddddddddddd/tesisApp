@@ -11,7 +11,7 @@
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
             <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
-                style="margin-top: 10px;margin-left: auto !important;">Crear cliente</button>
+                style="margin-top: 10px;margin-left: auto !important;">Crear clientes</button>
         </div>
     </div>
     <ng-template #suffixIconSearch>
@@ -58,7 +58,7 @@
         <ng-container *nzModalContent>
             <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="identificacion" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="identificacion" nzRequired>
                         <span>Identificación</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su identificacion!">
@@ -66,13 +66,13 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El valor no es valido E-mail!">
                         <input nz-input formControlName="email" id="email" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nombres" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="nombres" nzRequired>
                         <span>Apellidos y nombres</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su nombres!">
@@ -80,7 +80,7 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="telefono" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="telefono" nzRequired>
                         <span>Teléfono</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su telefono!">
@@ -88,7 +88,7 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="direccion" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="direccion" nzRequired>
                         <span>Direccion</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese su direccion!">

@@ -21,7 +21,7 @@ html,
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--color-3);
+    background-color: #3565af;
     font-family: var(--font-family-1);
     font-size: var(--font-size-1);
     color: var(--color-4);

@@ -210,7 +210,6 @@ export class ArchivadorPageComponent implements OnInit {
     }
   }
   showDeleteConfirm(key: string): void {
-    console.log(key);
     this.modal.confirm({
       nzTitle: '¿Estás seguro de eliminar?',
       nzContent: '<b style="color: red;">Esta acción no se puede deshacer</b>',

@@ -36,7 +36,7 @@
                 <tr *ngFor="let data of basicTable.data">
                     <td>{{data.nombre}}</td>
                     <td>{{data.estado}}</td>
-                    <td>{{data.createdAt}}</td>
+                    <td>{{data.createdAt?.substring(0, 10)}}</td>
                     <td>
                         <a nz-dropdown [nzDropdownMenu]="menu">
                             Acción
