@@ -52,7 +52,6 @@ export class ArchivadorPageComponent implements OnInit {
   keyId: string = '';
   keyIdSelected: string = '';
   rowService: any = {};
-  cliente: string = '';
   usuario: any = {}
   lisDto: any = [];
   rowRequirimiento: any = [];
@@ -87,14 +86,16 @@ export class ArchivadorPageComponent implements OnInit {
   rolAdmin: boolean = false;
   rolTramitador: boolean = false;
   rolSecretaria: boolean = false;
+  compareFn = (o1: any, o2: any): boolean => (o1 && o2 ? o1.nombres === o2.nombres : o1 === o2);
+  compareFn2 = (o1: any, o2: any): boolean => (o1 && o2 ? o1.nombre === o2.nombre : o1 === o2);
   constructor(private arcService: ArchivaService,
     private fb: NonNullableFormBuilder, private modal: NzModalService, private message: NzMessageService
   ) {
     this.validateForm = this.fb.group({
-      canton: ['', [Validators.required]],
+      canton: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       parroquia: ['', [Validators.required]],
       mts: ['',],
-      provincia: ['', [Validators.required]],
+      provincia: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       total: ['', [Validators.required]],
       sector: ['', [Validators.required]],
       cliente: ['', [Validators.required]],
@@ -200,6 +201,33 @@ export class ArchivadorPageComponent implements OnInit {
         .subscribe(
           res => {
             this.message.create('success', `Tramite finalizado con exito`);
+            this.isLoad = false;
+            this.handleArchiCancel()
+            this.getData();
+            this.validateForm.reset();
+          })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  aperturarTramite() {
+    try {
+      if (this.listOfData.length === 0) {
+        this.message.create('error', `Error, no existen requerimientos`);
+        return
+      }
+      // const ifPendiente = this.listOfData.filter(d => d.estadoTramite === "PENDIENTE")
+      // if (ifPendiente.length > 0) {
+      //   this.message.create('error', `Error, existen requerimientos pendientes`);
+      //   return
+      // }
+      const model = { estado: false }
+      this.isLoad = true;
+      this.arcService.Update(this.rowService?._id, model)
+        .subscribe(
+          res => {
+            this.message.create('success', `Tramite aperturado con exito`);
             this.isLoad = false;
             this.handleArchiCancel()
             this.getData();
@@ -435,7 +463,7 @@ export class ArchivadorPageComponent implements OnInit {
       tipo: this.tipo,
       monto: this.monto,
       fecha: new Date(),
-      text: 'Abono servicio'
+      text: `Abono servicio ${this.rowService?.cliente?.nombres}`
     }
     this.arcService.updateAbona(this.rowService?._id, model)
       .subscribe(res => {
@@ -444,6 +472,7 @@ export class ArchivadorPageComponent implements OnInit {
         this.monto = ''
         this.getDataByIdPagos(this.rowService?._id)
       })
+      this.getData();
   }
   deleteRowPagos(id: string): void {
     try {
@@ -453,6 +482,7 @@ export class ArchivadorPageComponent implements OnInit {
           this.message.create('success', `Pago eliminado con exito`);
           this.getDataByIdPagos(this.rowService?._id)
         })
+        this.getData();
     } catch (error) {
     }
   }

@@ -45,5 +45,20 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
-  
+  .s-entreg{
+    color: red !important;
+  }
+  .entrega {
+    color: blue;
+  }
+  .s-terminados{
+    color: rgb(123 218 75);
+    background-color: rgb(142 226 77 / 18%);
+  }
+  .s-proceso{
+    color: blue;
+  }
+  .s-color-white{
+    color: #fff;
+  }
   

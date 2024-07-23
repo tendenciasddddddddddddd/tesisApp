@@ -1,17 +1,17 @@
-<div class="history-page" style="margin-top: 10px;">
-    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+<div class="history-page">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 20px;">
         <div nz-col nzSpan="8">
-            <h2 nz-typography>Archivador</h2>
+            <h4 nz-typography style="margin-top: 5px;">Archivador</h4>
         </div>
         <div nz-col nzSpan="8">
-            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
-                <input type="text" #searchText nz-input placeholder="introducir texto de busqueda" Green
-                    (keyup.enter)="search(searchText.value)" />
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="border-radius: 3.1rem;background: #f1f1f1;">
+                <input type="text" #searchText nz-input placeholder="Introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" style="background: #f1f1f1;"/>
             </nz-input-group>
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
-            <button *ngIf="rolAdmin || rolTramitador" [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
-                style="margin-top: 10px;margin-left: auto !important;">Agregar servicio</button>
+            <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
+                style="margin-left: auto !important;">Agregar servicio</button>
         </div>
     </div>
     <ng-template #suffixIconSearch>
@@ -22,48 +22,51 @@
         <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
-            <thead>
-                <tr>
-                    <th>Nombres</th>
-                    <th>Servicio</th>
-                    <th>Dirección</th>
-                    <th>Total</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let data of basicTable.data">
-                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
-                        <div (click)="showModalArchiva(data)" style="cursor: pointer;">
-                            {{data.search1}}
-                        </div>
-                    </td>
-                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
-                        {{data.search2}}
-                    </td>
-                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
-                        {{data.provincia }} / {{data.canton}}
-                    </td>
-                    <td [ngClass]="data.estado === true ? 's-terminados' : ''">
-                        $ {{data.total}}</td>
-                    <td>
-                        <a nz-dropdown [nzDropdownMenu]="menu">
-                            Acción
-                            <span nz-icon nzType="down"></span>
-                        </a>
-                        <nz-dropdown-menu #menu="nzDropdownMenu">
-                            <ul nz-menu nzSelectable>
-                                <li *ngIf="rolAdmin || rolTramitador" nz-menu-item (click)="update(data)">Editar</li>
-                                <li *ngIf="rolAdmin || rolSecretaria" nz-menu-item (click)="openPagos(data)">Registrar pagos</li>
-                                <li *ngIf="rolAdmin || rolSecretaria" nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
-                                <li *ngIf="rolAdmin ||rolTramitador" nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
-                            </ul>
-                        </nz-dropdown-menu>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
+        <div class="" style="border-radius: 12px; border: 1px solid rgb(0 0 0 / 10%);">
+            <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Servicio</th>
+                        <th>Dirección</th>
+                        <th>Total</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                            <div (click)="showModalArchiva(data)" style="cursor: pointer;">
+                                {{data.search1}}
+                            </div>
+                        </td>
+                        <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                            {{data.search2}}
+                        </td>
+                        <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                            {{data.provincia }} / {{data.canton}}
+                        </td>
+                        <td [ngClass]="data.estado === true ? 's-terminados' : ''">
+                            <mark>$ {{data.abono}}</mark> - {{data.total}}</td>
+                        <td>
+                            <a nz-dropdown [nzDropdownMenu]="menu">
+                                Acción
+                                <span nz-icon nzType="down"></span>
+                            </a>
+                            <nz-dropdown-menu #menu="nzDropdownMenu">
+                                <ul nz-menu nzSelectable>
+                                    <li *ngIf="rolAdmin || rolTramitador" nz-menu-item (click)="update(data)">Editar</li>
+                                    <li *ngIf="rolAdmin || rolSecretaria" nz-menu-item (click)="openPagos(data)">Registrar pagos</li>
+                                    <li *ngIf="rolAdmin || rolSecretaria" nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
+                                    <li *ngIf="rolAdmin ||rolTramitador" nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
+                                </ul>
+                            </nz-dropdown-menu>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        
     </ng-template>
 
     <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="false" [nzWidth]="1100" [nzVisible]="isVisible"
@@ -73,9 +76,9 @@
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24">Cliente</nz-form-label>
-                        <nz-select id="cliente" formControlName="cliente" nzPlaceHolder="Seleccione un cliente"
+                        <nz-select  [compareWith]="compareFn" nzAllowClear formControlName="cliente" nzPlaceHolder="Seleccione un cliente"
                             style="width: 67%;">
-                            <nz-option *ngFor="let option of lisCliente" [nzLabel]="option.nombres"
+                            <nz-option  *ngFor="let option of lisCliente" [nzLabel]="option.nombres"
                                 [nzValue]="option"></nz-option>
                         </nz-select>
                     </nz-form-item>
@@ -95,7 +98,7 @@
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24">Servicios</nz-form-label>
-                        <nz-select id="servicio" formControlName="servicio" nzPlaceHolder="Seleccione un servicio"
+                        <nz-select [compareWith]="compareFn2" nzAllowClear id="servicio" formControlName="servicio" nzPlaceHolder="Seleccione un servicio"
                             style="width: 67%;">
                             <nz-option *ngFor="let option of lisServices" [nzLabel]="option.nombre"
                                 [nzValue]="option"></nz-option>
@@ -281,11 +284,17 @@
             </ng-template>
         </div>
         <ng-template #footerTpl2>
-            <div style="text-align: center;">
+            <div style="text-align: center;display: flex; justify-content: center !important;">
                 <button [nzSize]="'large'" (click)="handleArchiCancel()" nz-button>CANCEL</button>
                 <nz-divider nzType="vertical"></nz-divider>
-                <button [nzSize]="'large'" nz-popconfirm nzPopconfirmTitle="¿Seguro que quiere dar por finalizado este tramite?"
-                (nzOnConfirm)="finalizarTramite()" nz-button nzType="primary">FINALIZAR ESTE TRAMITE</button>
+                <div *ngIf="!rowService.estado;else btns">
+                    <button [nzSize]="'large'" nz-popconfirm nzPopconfirmTitle="¿Seguro que quiere dar por finalizado este tramite?"
+                    (nzOnConfirm)="finalizarTramite()" nz-button nzType="primary">FINALIZAR TRAMITE</button>
+                </div>
+                <ng-template #btns>
+                    <button [nzSize]="'large'" nz-popconfirm nzPopconfirmTitle="¿Seguro que quiere aperturar este tramite?"
+                    (nzOnConfirm)="aperturarTramite()" nz-button nzType="primary">APERTURAR TRAMITE</button>
+                </ng-template>
             </div>
         </ng-template>
     </nz-drawer>
@@ -300,15 +309,15 @@
             <ng-template #other_content2>
                 <div nz-row>
                     <div nz-col nzSpan="6">
-                        <span>Total</span>
+                        <span style="color: #000;">Total</span>
                         <h1 nz-typography>$ {{rowService.total}}</h1>
                     </div>
                     <div nz-col nzSpan="6">
-                        <span>Abonos</span>
+                        <span style="color: #000;">Abonos</span>
                         <h1 nz-typography>$ {{totalAbonos}}</h1>
                     </div>
                     <div nz-col nzSpan="6">
-                        <span>Saldo</span>
+                        <span style="color: #000;">Saldo</span>
                         <h1 nz-typography>$ {{rowService.total - totalAbonos}}</h1>
                     </div>
                     <div nz-col nzSpan="6">

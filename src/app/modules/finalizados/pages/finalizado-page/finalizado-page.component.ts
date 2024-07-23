@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FinalService } from '@modules/finalizados/services/final.service';
 import { Observable, of } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 interface ItemData {
   _id: string;
@@ -48,7 +49,7 @@ export class FinalizadoPageComponent implements OnInit {
   totalAbonos: number = 0;
   porcAbonos: number = 0;
   facturaHtml: any = {};
-  constructor(private arcService: FinalService) {
+  constructor(private arcService: FinalService, private message: NzMessageService) {
   }
 
   ngOnInit(): void {
@@ -180,6 +181,43 @@ export class FinalizadoPageComponent implements OnInit {
         )
     } catch (error) {
       this.isLoad = false;
+    }
+  }
+  despacharTramite(id : any, data : any) {
+    const {abono, total} = data
+    let tot = Number(total)
+    let abo = Number(abono)
+    if(abo != tot){
+      this.message.create('error', `Existe saldo pendiente`);
+      return
+    }
+    try {
+      const model = { entrega: true }
+      this.isLoad = true;
+      this.arcService.Update(id, model)
+        .subscribe(
+          res => {
+            this.message.create('success', `Tramite despachado con exito`);
+            this.isLoad = false;
+            this.getData();
+          })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  anularDespacho(id : any) {
+    try {
+      const model = { entrega: false }
+      this.isLoad = true;
+      this.arcService.Update(id, model)
+        .subscribe(
+          res => {
+            this.message.create('success', `Tramite despachado con exito`);
+            this.isLoad = false;
+            this.getData();
+          })
+    } catch (error) {
+      console.log(error);
     }
   }
 }

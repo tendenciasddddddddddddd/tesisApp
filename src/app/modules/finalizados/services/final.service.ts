@@ -23,4 +23,7 @@ export class FinalService {
   builfPdf(data: any) {
     return this.http.post(`${this.URL}/reportes/buildpdf/`,data);
   }
+  Update(id: string ,data: any) {
+    return this.http.put(`${this.URL}/archivador/${id}`,data);
+  }
 }

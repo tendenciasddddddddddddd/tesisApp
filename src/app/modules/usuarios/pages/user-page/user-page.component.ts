@@ -14,6 +14,7 @@ export class UserPageComponent implements OnInit {
   listResults$: Observable<any> = of([])
   isLoads: boolean = false;
   isVisible = false;
+  show: boolean = true;
   isRoles = false;
   keyId: string = '';
   lisDto: any = [];
@@ -40,10 +41,10 @@ export class UserPageComponent implements OnInit {
     this.validateForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
       cedula: ['', [Validators.required]],
-      fullname: ['', [Validators.required]],
-      telefono: ['', [Validators.required]],
+      fullname: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9 ]*$')]],
       direccion: ['', [Validators.required]],
-      password: ['',[Validators.required]],
+      password: ['',[Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]],
       ifPassword: ['',],
     });
   }
@@ -79,7 +80,10 @@ export class UserPageComponent implements OnInit {
               this.isVisible = false;
               this.getData();
               this.validateForm.reset();
-            })
+            },
+            error => {
+              this.message.create('error', `El usuario ya se encuantra registrado`);
+            },)
       } else {
         this.useService.Update(this.keyId, this.validateForm.value)
           .subscribe(
@@ -216,7 +220,7 @@ export class UserPageComponent implements OnInit {
     }
   }
   updateRoles(model : any){
-    this.useService.Update(this.detalleUser?._id, model)
+    this.useService.UpdateRole(this.detalleUser?._id, model)
     .subscribe(
       res => {
         this.message.create('success', `Registro editado con exito`);
@@ -226,6 +230,7 @@ export class UserPageComponent implements OnInit {
       })
   }
   showModal(): void {
+    this.show = true;
     this.keyId = ''
     this.validateForm.reset();
     this.isVisible = true;

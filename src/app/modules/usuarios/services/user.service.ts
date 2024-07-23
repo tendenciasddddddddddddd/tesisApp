@@ -25,4 +25,7 @@ export class UserService {
   Update(id: string ,cliente: any) {
     return this.http.put(`${this.URL}/users/${id}`,cliente);
   }
+  UpdateRole(id: string ,cliente: any) {
+    return this.http.put(`${this.URL}/users/role/${id}`,cliente);
+  }
 }

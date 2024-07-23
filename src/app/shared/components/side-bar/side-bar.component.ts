@@ -38,7 +38,7 @@ export class SideBarComponent implements OnInit {
         router: ['/', 'tracks']
       },
       {
-        estado : this.rolAdmin || this.rolTramitador || this.rolSecretaria,
+        estado : this.rolAdmin || this.rolTramitador,// || this.rolSecretaria,
         name: 'Clientes',
         icon: 'uil uil-users-alt',
         router: ['/', 'clientes']
@@ -46,7 +46,7 @@ export class SideBarComponent implements OnInit {
       {
         estado : this.rolAdmin || this.rolTramitador ,
         name: 'Servicios',
-        icon: 'uil uil-chart',
+        icon: 'uil-server-connection',
         router: ['/', 'servicios'],
         query: { hola: 'mundo' }
       }
@@ -56,25 +56,25 @@ export class SideBarComponent implements OnInit {
       {
         estado : this.rolAdmin || this.rolTramitador || this.rolSecretaria,
         name: 'Archivador',
-        icon: 'uil-clouds',
+        icon: 'uil-folder-lock',
         router: ['/', 'archivador']
       },
       {
-        estado : this.rolAdmin || this.rolTramitador,
+        estado : this.rolAdmin || this.rolTramitador || this.rolSecretaria,
         name: 'Finalizados',
-        icon: 'uil-comment-check',
+        icon: 'uil-history',
         router: ['/', 'finalizados']
       },
       {
         estado : this.rolAdmin || this.rolSecretaria,
         name: 'Caja',
-        icon: 'uil-dollar-sign',
+        icon: 'uil-file-medical-alt',
         router: ['/', 'caja']
       },
       {
         estado : this.rolAdmin,
         name: 'Usuarios',
-        icon: 'uil-user-plus',
+        icon: 'uil-fire',
         router: ['/', 'usuarios']
       }
     ]
@@ -104,5 +104,19 @@ export class SideBarComponent implements OnInit {
     localStorage.clear();
     window.location.reload()
   }
-
+  toggleBodyClass() {
+    const el = document.body;
+    if (!el.classList.contains('sidebar-hidden')) {
+      el.classList.add('sidebar-hidden');
+    } else {
+      el.classList.remove('sidebar-hidden');
+    }
+  }
+  Resize () {
+    let Mobile = window.innerWidth < 1200
+    if (Mobile) {
+      const el = document.body;
+      el.classList.add('sidebar-hidden');
+    }
+  }
 }

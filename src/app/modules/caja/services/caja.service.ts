@@ -29,6 +29,13 @@ export class CajaService {
     return this.http.get(`${this.URL}/reportes/cierrecaja?user=${user}&total=${total}`);
   }
 
+  ComprobanteHistorial(user: any, total: any, info: any) {
+    return this.http.post(`${this.URL}/reportes/historial?user=${user}&total=${total}`, info);
+  }
+  BuildPdfCaja(data: any) {
+    return this.http.post(`${this.URL}/reportes/buildcaja`, data);
+  }
+
   /*Historial de cajas */
   listHistorial() {
     return this.http.get(`${this.URL}/historial`);

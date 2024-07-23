@@ -18,6 +18,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzMessageModule,
     NzGridModule,
     NzSpinModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzIconModule
   ]
 })
 export class UsuariosModule { }

@@ -110,6 +110,7 @@ export class ServicioPageComponent implements OnInit {
   update(data: any) {
     this.keyId = data._id;
     this.validateForm.controls['nombre'].setValue(data.nombre);
+    this.validateForm.controls['estado'].setValue(data.estado);
     this.isVisible = true;
   }
   showModal(): void {

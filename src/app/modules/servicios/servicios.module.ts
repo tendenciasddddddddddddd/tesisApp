@@ -18,6 +18,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzInputModule,
     NzMessageModule,
     NzGridModule,
-    NzSpinModule
+    NzSpinModule,
+    NzSwitchModule,
+    NzIconModule
   ]
 })
 export class ServiciosModule { }

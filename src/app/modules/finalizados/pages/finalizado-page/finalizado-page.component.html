@@ -1,18 +1,19 @@
-<div class="history-page" style="margin-top: 10px;">
-    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+<div class="history-page">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 20px;">
         <div nz-col nzSpan="8">
-            <h2 nz-typography>Tramites finalizados</h2>
+            <h4 nz-typography style="margin-top: 5px;">Finalizados</h4>
         </div>
         <div nz-col nzSpan="8">
-            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
-                <input type="text" #searchText nz-input placeholder="introducir texto de busqueda" Green
-                    (keyup.enter)="search(searchText.value)" />
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="border-radius: 3.1rem;background: #f1f1f1;">
+                <input type="text" #searchText nz-input placeholder="Introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" style="background: #f1f1f1;"/>
             </nz-input-group>
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
-          
+           
         </div>
     </div>
+    
     <ng-template #suffixIconSearch>
         <i nz-icon nzType="search"></i>
     </ng-template>
@@ -21,41 +22,57 @@
         <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
-            <thead>
-                <tr>
-                    <th>Nombres</th>
-                    <th>Servicio</th>
-                    <th>Dirección</th>
-                    <th>Total</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let data of basicTable.data">
-                    <td>
-                        <div (click)="showModalArchiva(data)" style="cursor: pointer;color: blue;">
-                            {{data.search1}}
-                        </div>
-                    </td>
-                    <td>{{data.search2}}</td>
-                    <td>{{data.provincia }} / {{data.canton}}</td>
-                    <td>$ {{data.total}}</td>
-                    <td>
-                        <a nz-dropdown [nzDropdownMenu]="menu">
-                            Acción
-                            <span nz-icon nzType="down"></span>
-                        </a>
-                        <nz-dropdown-menu #menu="nzDropdownMenu">
-                            <ul nz-menu nzSelectable>
-                                <li nz-menu-item (click)="openPagos(data)">Detalle pagos</li>
-                                <li nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
-                            </ul>
-                        </nz-dropdown-menu>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
+        <div class="" style="border-radius: 12px; border: 1px solid rgb(0 0 0 / 10%);">
+            <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Servicio</th>
+                        <th>Dirección</th>
+                        <th>Total</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td [ngClass]="data.entrega === true ? 's-terminados' : ''">
+                            <div (click)="showModalArchiva(data)" style="cursor: pointer;">
+                                {{data.search1}}
+                            </div>
+                        </td>
+                        <td [ngClass]="data.entrega === true ? 's-terminados' : ''">{{data.search2}}</td>
+                        <td [ngClass]="data.entrega === true ? 's-terminados' : ''">{{data.provincia }} / {{data.canton}}</td>
+                        <td [ngClass]="data.entrega === true ? 's-terminados' : ''"> <mark>$ {{data.abono}}</mark> - {{data.total}}</td>
+                        <td>
+                            <a nz-dropdown [nzDropdownMenu]="menu">
+                                Acción
+                                <span nz-icon nzType="down"></span>
+                            </a>
+                            <nz-dropdown-menu #menu="nzDropdownMenu">
+                                <ul nz-menu nzSelectable>
+                                    <li nz-menu-item (click)="openPagos(data)">Detalle pagos</li>
+                                    <li nz-menu-item (click)="openComprobante(data)">Imprimir comprobante</li>
+                                    <li nz-menu-item >
+                                        <div *ngIf="!data?.entrega; else elseBlocks">
+                                            <a nz-popconfirm
+                                        nzPopconfirmTitle="¿Seguro que lo quieres despachar este tramite?"
+                                        (nzOnConfirm)="despacharTramite(data?._id, data)">Despachar tramite</a>
+                                        </div>
+                                        <ng-template #elseBlocks>
+                                            <a nz-popconfirm
+                                            nzPopconfirmTitle="¿Seguro que lo quieres anular el despacho?"
+                                            (nzOnConfirm)="anularDespacho(data?._id)">Anular despacho</a>
+                                        </ng-template>
+                                        
+                                    </li>
+                                </ul>
+                            </nz-dropdown-menu>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+       
     </ng-template>
 
     <nz-drawer [nzBodyStyle]="{ overflow: 'auto'}" [nzMaskClosable]="true" [nzWidth]="-1"

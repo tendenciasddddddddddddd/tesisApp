@@ -18,6 +18,11 @@
     flex-direction: column;
     align-items: center;
 }
+@media screen and (max-width: 701px){
+    .login-auth-page .login-auth-wrapper {
+        width: 70%;
+    }
+}
 
 .login-auth-page .login-social-zone {
     display: flex;

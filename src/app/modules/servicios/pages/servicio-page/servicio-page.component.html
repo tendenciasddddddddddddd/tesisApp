@@ -1,18 +1,17 @@
-<div class="history-page" style="margin-top: 10px;">
-    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+<div class="history-page">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 20px;">
         <div nz-col nzSpan="8">
-            <h2 nz-typography>Gestion de servicios</h2>
+            <h4 nz-typography style="margin-top: 5px;">Servicios</h4>
         </div>
         <div nz-col nzSpan="8">
-            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
-                <input type="search" #searchText nz-input placeholder="introducir texto de busqueda" Green
-                    (keyup.enter)="search(searchText.value)"/>
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="border-radius: 3.1rem;background: #f1f1f1;">
+                <input type="text" #searchText nz-input placeholder="Introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" style="background: #f1f1f1;"/>
             </nz-input-group>
         </div>
-        <div></div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
             <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
-                style="margin-top: 10px;margin-left: auto !important;">Crear servicio</button>
+                style="margin-left: auto !important;">Crear servicio</button>
         </div>
     </div>
     <ng-template #suffixIconSearch>
@@ -23,35 +22,41 @@
         <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="listDto">
-            <thead>
-                <tr>
-                    <th>Nombres</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let data of basicTable.data">
-                    <td>{{data.nombre}}</td>
-                    <td>{{data.estado}}</td>
-                    <td>{{data.createdAt?.substring(0, 10)}}</td>
-                    <td>
-                        <a nz-dropdown [nzDropdownMenu]="menu">
-                            Acción
-                            <span nz-icon nzType="down"></span>
-                        </a>
-                        <nz-dropdown-menu #menu="nzDropdownMenu">
-                            <ul nz-menu nzSelectable>
-                                <li nz-menu-item (click)="update(data)">Editar</li>
-                                <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
-                            </ul>
-                        </nz-dropdown-menu>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
+        <div class="" style="border-radius: 12px; border: 1px solid rgb(0 0 0 / 10%);">
+            <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="listDto">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td>{{data.nombre}}</td>
+                        <td>
+                            <div *ngIf="data.estado; else elseBlock">Disponible</div>
+                            <ng-template #elseBlock>No disponible</ng-template>
+                        </td>
+                        <td>{{data.createdAt?.substring(0, 10)}}</td>
+                        <td>
+                            <a nz-dropdown [nzDropdownMenu]="menu">
+                                Acción
+                                <span nz-icon nzType="down"></span>
+                            </a>
+                            <nz-dropdown-menu #menu="nzDropdownMenu">
+                                <ul nz-menu nzSelectable>
+                                    <li nz-menu-item (click)="update(data)">Editar</li>
+                                    <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
+                                </ul>
+                            </nz-dropdown-menu>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        
     </ng-template>
 
     <nz-modal [nzStyle]="{width:'700px'}" nzCentered [(nzVisible)]="isVisible" nzTitle="Clientes"
@@ -64,6 +69,14 @@
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el servicio!">
                         <input nzSize="large" nz-input id="nombre" formControlName="nombre" autocomplete="off"/>
+                    </nz-form-control> 
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nombre" nzRequired>
+                        <span>Estado</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-switch id="estado" formControlName="estado"></nz-switch>
                     </nz-form-control>
                 </nz-form-item>
             </form>

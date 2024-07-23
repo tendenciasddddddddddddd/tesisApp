@@ -1,19 +1,20 @@
-<div class="history-page" style="margin-top: 10px;">
-    <div nz-row nzJustify="space-between" style="margin-bottom: 15px;">
+<div class="history-page">
+    <div nz-row nzJustify="space-between" style="margin-bottom: 20px;">
         <div nz-col nzSpan="8">
-            <h2 nz-typography>Usuarios de sistema</h2>
+            <h4 nz-typography style="margin-top: 5px;">Usuarios</h4>
         </div>
         <div nz-col nzSpan="8">
-            <nz-input-group [nzSuffix]="suffixIconSearch" style="margin-top: 10px;">
-                <input type="text" #searchText nz-input placeholder="introducir texto de busqueda" Green
-                    (keyup.enter)="search(searchText.value)" />
+            <nz-input-group [nzSuffix]="suffixIconSearch" style="border-radius: 3.1rem;background: #f1f1f1;">
+                <input type="text" #searchText nz-input placeholder="Introducir texto de busqueda" Green
+                    (keyup.enter)="search(searchText.value)" style="background: #f1f1f1;"/>
             </nz-input-group>
         </div>
         <div nz-col nzSpan="8" style="display: inline-grid;">
-            <button nzSize="large" nz-button nzType="primary" (click)="showModal()"
-                style="margin-top: 10px;margin-left: auto !important;">Crear usuario</button>
+            <button [nzSize]="'large'" nz-button nzType="primary" (click)="showModal()"
+                style="margin-left: auto !important;">Crear usuario</button>
         </div>
     </div>
+   
     <ng-template #suffixIconSearch>
         <i nz-icon nzType="search"></i>
     </ng-template>
@@ -22,36 +23,39 @@
         <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
     <ng-template #other_content>
-        <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
-            <thead>
-                <tr>
-                    <th>Nombres</th>
-                    <th>Identificación</th>
-                    <th>Email</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let data of basicTable.data">
-                    <td>{{data.fullname}}</td>
-                    <td>{{data.cedula}}</td>
-                    <td>{{data.email}}</td>
-                    <td>
-                        <a nz-dropdown [nzDropdownMenu]="menu">
-                            Acción
-                            <span nz-icon nzType="down"></span>
-                        </a>
-                        <nz-dropdown-menu #menu="nzDropdownMenu">
-                            <ul nz-menu nzSelectable>
-                                <li nz-menu-item (click)="update(data)">Editar</li>
-                                <li nz-menu-item (click)="role(data)">Roles y permisos</li>
-                                <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
-                            </ul>
-                        </nz-dropdown-menu>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
+        <div class="" style="border-radius: 12px; border: 1px solid rgb(0 0 0 / 10%);">
+            <nz-table #basicTable nzShowSizeChanger [nzPageSizeOptions]="[7,20,50,100]" [nzPageSize]="7" [nzData]="lisDto">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Identificación</th>
+                        <th>Email</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td>{{data.fullname}}</td>
+                        <td>{{data.cedula}}</td>
+                        <td>{{data.email}}</td>
+                        <td>
+                            <a nz-dropdown [nzDropdownMenu]="menu">
+                                Acción
+                                <span nz-icon nzType="down"></span>
+                            </a>
+                            <nz-dropdown-menu #menu="nzDropdownMenu">
+                                <ul nz-menu nzSelectable>
+                                    <li nz-menu-item (click)="update(data)">Editar</li>
+                                    <li nz-menu-item (click)="role(data)">Roles y permisos</li>
+                                    <li nz-menu-item nzDanger (click)="showDeleteConfirm(data._id)">Eliminar</li>
+                                </ul>
+                            </nz-dropdown-menu>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        
     </ng-template>
 
     <nz-modal [nzStyle]="{width:'700px'}" nzCentered [(nzVisible)]="isVisible" nzTitle="Clientes"
@@ -59,7 +63,7 @@
         <ng-container *nzModalContent>
             <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cedula" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="cedula" nzRequired>
                         <span>Identificación</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la identificacion!">
@@ -67,13 +71,13 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El valor no es valido E-mail!">
                         <input nz-input formControlName="email" id="email" autocomplete="off" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="fullname" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="fullname" nzRequired>
                         <span>Apellidos y nombres</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el nombre!">
@@ -81,7 +85,7 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="telefono" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="telefono" nzRequired>
                         <span>Teléfono</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese el telefono!">
@@ -89,7 +93,7 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="direccion" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="direccion" nzRequired>
                         <span>Direccion</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la direccion!">
@@ -97,11 +101,25 @@
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>
+                    <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="password" nzRequired>
                         <span>Contraseña</span>
                     </nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="¡Por favor ingrese la Contraseña!">
-                        <input nz-input id="password" formControlName="password" autocomplete="off" type="password"/>
+                        <div *ngIf="show;else shows">
+                            <input nz-input id="password" formControlName="password" autocomplete="off" type="password"/>
+                        </div>
+                        <ng-template #shows>
+                            <input nz-input id="password" formControlName="password" autocomplete="off" type="text"/>
+                        </ng-template>
+                        <div style="margin-top: 8px;">
+                            <div *ngIf="!show;else btns">
+                                <span (click)="show = true" style="font-size: 20px;cursor: pointer;" nz-icon nzType="eye-invisible" nzTheme="outline"></span>
+                            </div>
+                            <ng-template #btns>
+                                <span (click)="show = false" style="font-size: 20px;cursor: pointer;" nz-icon nzType="eye" nzTheme="outline"></span>
+                            </ng-template>
+                        </div>
+                       
                     </nz-form-control>
                 </nz-form-item>
             </form>

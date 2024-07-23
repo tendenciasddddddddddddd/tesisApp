@@ -29,8 +29,8 @@ export class ClientePageComponent implements OnInit {
     this.validateForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
       identificacion: ['', [Validators.required]],
-      nombres: ['', [Validators.required]],
-      telefono: ['', [Validators.required]],
+      nombres: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9 ]*$')]],
       direccion: ['', [Validators.required]],
     });
   }
@@ -62,7 +62,10 @@ export class ClientePageComponent implements OnInit {
               this.isVisible = false;
               this.getData();
               this.validateForm.reset();
-            })
+            },
+            error => {
+              this.message.create('error', `El cliente ya se encuantra registrado`);
+            },)
       } else {
         this.cliService.Update(this.keyId, this.validateForm.value)
           .subscribe(

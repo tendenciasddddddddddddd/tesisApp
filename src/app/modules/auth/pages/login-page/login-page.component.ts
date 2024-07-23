@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class LoginPageComponent implements OnInit {
   errorSession: boolean = false
   formLogin: UntypedFormGroup = new UntypedFormGroup({});
+  show: boolean = true;
 
   constructor(private authService: AuthService, private cookie: CookieService,
     private router: Router) { }

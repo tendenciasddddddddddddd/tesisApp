@@ -15,6 +15,7 @@ export class CajaPageComponent implements OnInit {
   listOfGastos: Array<{ id: number; text: string; monto: string; }> = [];
   listResults$: Observable<any> = of([])
   isLoads: boolean = false;
+  isLoads2: boolean = false;
   estadoCaja: boolean = false;
   isVisibleComprobante: boolean = false;
   tabs = [1, 2, 3];
@@ -148,6 +149,10 @@ export class CajaPageComponent implements OnInit {
     this.listOfControl.push(control);
   }
   removeField(i: { id: number; text: string; monto: string }, e: MouseEvent): void {
+    if(i.id === 1000) {
+      this.message.create('error', `No se puede eliminar ABONOS SERVICIOS`);
+      return
+    }
     e.preventDefault();
     const index = this.listOfControl.indexOf(i);
     this.listOfControl.splice(index, 1);
@@ -188,10 +193,9 @@ export class CajaPageComponent implements OnInit {
   }
   /*Para ingresos */
   addFieldGastos(e?: MouseEvent): void {
+
     e?.preventDefault();
-
     const id = this.listOfGastos.length > 0 ? this.listOfGastos[this.listOfGastos.length - 1].id + 1 : 0;
-
     const control = {
       id,
       text: '',
@@ -281,6 +285,24 @@ export class CajaPageComponent implements OnInit {
     this.getComprobante()
     this.isVisibleComprobante = true;
   }
+  printHistorial(data: any): void {
+    this.getComprobanteHistoria(data)
+    this.isVisibleComprobante = true;
+  }
+  getComprobanteHistoria(data: any) {
+    this.isLoads2 = true;
+    this.usuario = localStorage.getItem('Usuario');
+    this.usuario = JSON.parse(this.usuario)
+    let user = this.usuario?.nombre
+    this.servService.ComprobanteHistorial(user, this.total, data)
+      .subscribe(
+        res => {
+          let data: any = res;
+          this.facturaHtml = data
+          this.isLoads2 = false;
+        },
+      )
+  }
   getComprobante() {
     this.isLoads = true;
     this.usuario = localStorage.getItem('Usuario');
@@ -295,4 +317,30 @@ export class CajaPageComponent implements OnInit {
         },
       )
   }
+  builfPdf (){
+   this.isLoads = true;
+   const box = document.getElementById('box')!.innerHTML;
+   const model = {info : box}
+    this.servService.BuildPdfCaja(model)
+      .subscribe(
+        res => {
+          let data: any = res;
+            let a = document.createElement('a');
+            a.target = '_blank';
+            a.href = data
+            a.click();
+            this.isLoads = false;
+        },
+      )
+  }
+  numericOnly(event: any): boolean {    
+    let patt = /^([0-9])$/;
+    let result = patt.test(event.key);
+    return result;
+}
+textOnly(event: any): boolean {    
+  let patt = /^[a-zA-Z ]*$/;
+  let result = patt.test(event.key);
+  return result;
+}
 }

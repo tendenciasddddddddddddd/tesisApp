@@ -45,7 +45,7 @@ export class ArchivaService {
     return this.http.get(`${this.URL}/cliente/list`);
   }
   listServicio() {
-    return this.http.get(`${this.URL}/servicios/list`);
+    return this.http.get(`${this.URL}/servicios/select`);
   }
 
   Comprobante(data: any) {
